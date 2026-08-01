@@ -1,0 +1,21 @@
+{
+  "name": "dexa-glsl-lab",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "bun run lint:registry && tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "lint:registry": "node scripts/lint-registry.mjs",
+    "thumbs": "node scripts/thumbs.mjs",
+    "test:e2e": "playwright test",
+    "deploy": "bash scripts/deploy.sh"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "typescript": "^7.0.2",
+    "vite": "^8.2.0"
+  }
+}
