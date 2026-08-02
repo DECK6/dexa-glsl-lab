@@ -46,4 +46,6 @@
 - 마스터의 별도 승인 후 카탈로그 소스를 `70b88d8` (`feat: complete 200-shader GLSL catalog`)로 커밋했다. 인계된 루트 임시 스크립트 `.check-pattern.mjs`와 `.thumb-pattern.mjs`는 수정·삭제하지 않고 커밋에서도 제외했다.
 - `bun run deploy`로 `/Volumes/data/Dev/adxdeck-dexa-daily-main/glsl`에 신규 배포했다. 배포본은 403개 파일, 셰이더 청크 200개, 썸네일 200개, 0-byte 0개이며 source `dist/`와 SHA-256 전수 일치한다.
 - 배포본을 직접 정적 서버로 실행한 Aside 브라우저 감사에서 카드 200개, 썸네일 200개, console/page/network error 0개와 CA01 WebGL 상세 렌더를 확인했다.
-- 소스 저장소에는 Git remote가 없으며, 승인 범위에 포함되지 않은 source push와 adxdeck commit/push는 실행하지 않았다.
+- 마스터의 추가 승인에 따라 공개 소스 저장소 [`DECK6/dexa-glsl-lab`](https://github.com/DECK6/dexa-glsl-lab)을 생성하고 `master`를 push했다. 카탈로그 `70b88d8`, 배포 원장 `7432495`, GEN/VFX LAB 형식을 따른 README `c26805e`가 원격에 반영됐다.
+- adxdeck에는 `47d2c4b` (`feat: publish DEXA GLSL LAB`)로 `glsl/` 403개 파일만 격리 커밋·push했다. GitHub Pages run `30728923245`의 build/deploy/report-build-status가 모두 성공했다.
+- 공개 [`https://dexa.art/glsl/`](https://dexa.art/glsl/)과 대표 썸네일·해시 자산의 HTTP 200을 확인했다. 공개 페이지를 새로 연 Aside 브라우저 감사에서도 카드 200개, 썸네일 200개, console/page/network error 0개와 CA01 696×696 WebGL·라이브 편집 UI를 확인했다.
