@@ -1,0 +1,3 @@
+float mt08Field(vec2 p,float t){vec2 q=p*11.;float a=sin((q.x+q.y)*3.14159);float b=sin((q.x-q.y)*3.14159);float over=step(0.,sin(floor(q.x)+floor(q.y)));float weave=mix(a,b,over);float glint=pow(max(0.,.5+.5*sin(q.x*.7+t)),8.);return weave*.32+glint*.7;}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 mt08p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.4;float mt08angle=atan(mt08p.y,mt08p.x);float mt08radius=length(mt08p);float mt08v=mt08Field(vec2(mt08angle,mt08radius),iTime);float mt08arc=smoothstep(.09,.01,abs(mt08radius-.55-.18*sin(mt08v)));vec3 mt08c=mix(uColBg,uColDim,.3+.25*cos(mt08v));mt08c=mix(mt08c,uColPaper,mt08arc);mt08c+=uColSignal*.28*smoothstep(.3,0.,abs(mt08v));fragColor=vec4(mt08c,1.);}

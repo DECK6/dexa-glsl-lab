@@ -1,0 +1,3 @@
+float at09Field(vec2 p,float t){float layer=exp(-9.*pow(p.y-.25,2.));float wave=.5+.5*sin(p.x*18.+2.4*sin(p.y*7.)-t*.35);return layer*wave+.08*sin(p.x*3.+p.y*5.);}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 at09p=(fragCoord-.5*iResolution.xy)/iResolution.y*3.;vec2 at09tile=floor(at09p);vec2 at09f=fract(at09p)-.5;float at09v=at09Field(at09f+at09tile*.17,iTime+dot(at09tile,vec2(.13,.19)));float at09mark=smoothstep(.16,.01,abs(at09v));float at09edge=smoothstep(.49,.45,max(abs(at09f.x),abs(at09f.y)));vec3 at09c=mix(uColBg,uColInk,at09edge);at09c=mix(at09c,uColAccent,at09mark);at09c+=uColSignal*.22*(1.-at09edge);fragColor=vec4(at09c,1.);}

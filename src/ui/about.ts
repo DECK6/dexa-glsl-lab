@@ -3,12 +3,12 @@ import { siteHeader } from './shell'
 const COPY = {
   ko: {
     heroBody:
-      '순수 GLSL 프래그먼트 셰이더 200종을 브라우저에서 감상하고, 소스를 직접 고쳐 즉시 반영되는 결과를 확인하는 라이브 셰이더 카탈로그입니다.',
+      'Core 350, Buffer 100, Input 50으로 구성된 GLSL 셰이더 500종을 브라우저에서 감상하고 소스를 직접 편집하는 라이브 카탈로그입니다.',
     sections: [
       {
         index: '01 / BROWSE',
         title: '갤러리 탐색',
-        body: '레이마칭부터 모아레까지 20개 카테고리를 필터링하고 제목, ID, 태그를 검색합니다. 정지 썸네일은 가볍게 유지되고 포커스한 작품만 라이브로 실행됩니다.',
+        body: 'FORM·FIELD·WORLD·SIM·MEDIA 5개 도메인과 50개 카테고리를 필터링하고 제목, ID, 태그를 검색합니다. 정지 썸네일은 가볍게 유지되고 포커스한 작품만 라이브로 실행됩니다.',
       },
       {
         index: '02 / EDIT',
@@ -18,7 +18,7 @@ const COPY = {
       {
         index: '03 / READ',
         title: '셰이더 읽기',
-        body: '모든 작품은 Shadertoy 스타일 mainImage 하나로 완결된 .frag 파일입니다. 러너가 유니폼 프렐류드를 소유하므로 소스는 알고리즘만 담습니다.',
+        body: 'Core는 단일 패스, Buffer는 ping-pong 상태, Input은 결정적 텍스처 fixture를 사용합니다. 모두 같은 Shadertoy 스타일 유니폼과 라이브 편집 계약을 공유합니다.',
       },
       {
         index: '04 / EXTEND',
@@ -26,16 +26,16 @@ const COPY = {
         body: '카테고리 폴더에 .frag와 메타 파일 쌍을 드롭하면 갤러리가 자동으로 발견합니다. 레지스트리 린트가 파일명, 메타 계약, 팔레트 사용을 검사합니다.',
       },
     ],
-    sourceLabel: '전체 소스, 200종 카탈로그, 설계 계약은 GitHub에 공개되어 있습니다.',
+    sourceLabel: '전체 소스, 500종 카탈로그, 3단계 런타임 계약은 GitHub에 공개되어 있습니다.',
   },
   en: {
     heroBody:
-      'A live shader catalog for exploring 200 pure GLSL fragment shaders in the browser and editing their source with instant recompilation.',
+      'A live catalog of 500 GLSL works—350 Core, 100 Buffer, and 50 Input—with instant in-browser source recompilation.',
     sections: [
       {
         index: '01 / BROWSE',
         title: 'Browse the gallery',
-        body: 'Filter across 20 categories from raymarching to moiré, then search by title, ID, or tag. Thumbnails stay light; only focused works run live.',
+        body: 'Filter five domains and 50 categories, then search by title, ID, or tag. Thumbnails stay light; only focused works run live.',
       },
       {
         index: '02 / EDIT',
@@ -45,7 +45,7 @@ const COPY = {
       {
         index: '03 / READ',
         title: 'Read the shader',
-        body: 'Every work is one self-contained .frag file built around a Shadertoy-style mainImage. The runner owns the uniform prelude, so sources hold only the algorithm.',
+        body: 'Core is single-pass, Buffer uses ping-pong state, and Input uses deterministic texture fixtures. All tiers share Shadertoy-style uniforms and live editing.',
       },
       {
         index: '04 / EXTEND',
@@ -53,7 +53,7 @@ const COPY = {
         body: 'Drop a matching .frag and metadata pair into a category folder and the gallery discovers it automatically. Registry lint enforces naming, metadata, and palette contracts.',
       },
     ],
-    sourceLabel: 'The full source, 200-shader catalog, and architecture contract are public on GitHub.',
+    sourceLabel: 'The full source, 500-shader catalog, and three-tier runtime contract are public on GitHub.',
   },
 } as const
 
@@ -79,7 +79,7 @@ export function mountAbout(root: HTMLElement): { destroy: () => void } {
         <div class="about-grid" data-role="about-grid"></div>
         <aside class="about-note mono">
           <span>RUNTIME CONTRACT</span>
-          640×640 SQUARE / WEBGL2 / SHADERTOY-STYLE UNIFORMS / LIVE RECOMPILE / FIXED-TIME THUMBNAILS
+          640×640 SQUARE / WEBGL2 / CORE + BUFFER + INPUT / LIVE RECOMPILE / DETERMINISTIC THUMBNAILS
         </aside>
         <aside class="about-note mono">
           <span>SOURCE</span>

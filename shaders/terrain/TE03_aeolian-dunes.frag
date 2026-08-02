@@ -1,0 +1,3 @@
+float te03Field(vec2 p,float t){float a=sin(p.x*5.+p.y*1.4-t*.45);float b=.55*sin(p.x*2.-p.y*4.+t*.22);return a+.32*b+.12*sin((p.x+p.y)*11.);}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 te03p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.2;float te03a=te03Field(te03p,iTime);float te03b=te03Field(mat2(.8,-.6,.6,.8)*te03p*1.17,-iTime*.73);float te03cross=smoothstep(.18,.01,abs(te03a-te03b));vec3 te03col=mix(uColInk,uColPaper,.5+.5*sin(te03a*5.));te03col=mix(te03col,uColSignal,te03cross);te03col=mix(uColBg,te03col,smoothstep(.02,.75,abs(te03a)+abs(te03b)));fragColor=vec4(te03col,1.);}

@@ -1,0 +1,3 @@
+float te10Field(vec2 p,float t){float side=sign(p.y-.28*p.x);vec2 q=p+side*vec2(.22*sin(t*.2),-.12);float layers=sin(q.y*18.+sin(q.x*3.));float seam=abs(p.y-.28*p.x);return layers*.4+exp(-18.*seam);}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 te10p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.5;float te10layers=0.;for(int te10k=0;te10k<6;te10k++){float te10s=float(te10k);vec2 te10q=te10p*(1.+te10s*.13)+.08*vec2(sin(te10s+iTime),cos(te10s*.7-iTime));te10layers+=sin(te10Field(te10q,iTime)*3.+te10s);}float te10v=.5+.5*sin(te10layers);vec3 te10c=mix(uColBg,uColPaper,te10v*.55);te10c=mix(te10c,uColSignal,smoothstep(.65,.96,te10v));te10c=mix(te10c,uColAccent,smoothstep(.92,1.,1.-te10v));fragColor=vec4(te10c,1.);}

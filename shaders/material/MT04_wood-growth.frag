@@ -1,0 +1,3 @@
+float mt04Field(vec2 p,float t){vec2 knot=p-vec2(.42*sin(t*.12),-.2);float warp=.18*sin(p.y*4.)+.26/(1.+18.*dot(knot,knot));float rings=length(vec2(p.x+warp,p.y*.62))*13.;return sin(rings)+.22*sin(p.y*75.+p.x*5.);}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 mt04uv=fragCoord/iResolution.xy;vec2 mt04cell=floor(mt04uv*9.);vec2 mt04local=fract(mt04uv*9.)-.5;float mt04v=mt04Field((mt04cell-4.)*.31+mt04local*.18,iTime+dot(mt04cell,vec2(.07,.11)));float mt04glyph=smoothstep(.42,.08,abs(mt04v));float mt04frame=smoothstep(.48,.44,max(abs(mt04local.x),abs(mt04local.y)));vec3 mt04c=mix(uColBg,uColInk,mt04frame);mt04c=mix(mt04c,uColSignal,mt04glyph*mt04frame);mt04c+=uColAccent*.2*(1.-mt04frame);fragColor=vec4(mt04c,1.);}

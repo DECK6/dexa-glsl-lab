@@ -1,0 +1,3 @@
+float mc05Field(vec2 p,float t){float a=atan(p.y-.3,p.x),r=length(p-vec2(0,.3));float gear=abs(r-(.42+.07*sin(12.*a-t)));float rackY=-.55;float teeth=abs(fract((p.x-t*.08)*6.)-.5)+abs(p.y-rackY)*2.;return min(gear,teeth*.15);}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 mc05p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.7;float mc05sum=0.;for(int mc05i=0;mc05i<18;mc05i++){float mc05s=float(mc05i)/17.;vec2 mc05d=.36*mc05s*vec2(cos(mc05s*9.+iTime*.2),sin(mc05s*7.));mc05sum+=exp(-4.*abs(mc05Field(mc05p+mc05d,iTime-mc05s)));}float mc05ink=1.-exp(-mc05sum*.16);vec3 mc05c=mix(uColBg,uColDim,.35);mc05c=mix(mc05c,uColSignal,mc05ink);mc05c+=uColPaper*.18*mc05ink+uColAccent*.12*sin(mc05sum);fragColor=vec4(mc05c,1.);}

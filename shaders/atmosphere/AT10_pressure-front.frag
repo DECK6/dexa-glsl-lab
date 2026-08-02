@@ -1,0 +1,3 @@
+float at10Field(vec2 p,float t){float front=p.y-.28*sin(p.x*2.-t*.25);float warm=sin(p.x*9.)*smoothstep(.2,-.1,front);float cold=cos(p.x*7.)*smoothstep(-.2,.1,front);return warm+cold+exp(-25.*front*front);}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 at10p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.5;float at10layers=0.;for(int at10k=0;at10k<6;at10k++){float at10s=float(at10k);vec2 at10q=at10p*(1.+at10s*.13)+.08*vec2(sin(at10s+iTime),cos(at10s*.7-iTime));at10layers+=sin(at10Field(at10q,iTime)*3.+at10s);}float at10v=.5+.5*sin(at10layers);vec3 at10c=mix(uColBg,uColPaper,at10v*.55);at10c=mix(at10c,uColSignal,smoothstep(.65,.96,at10v));at10c=mix(at10c,uColAccent,smoothstep(.92,1.,1.-at10v));fragColor=vec4(at10c,1.);}

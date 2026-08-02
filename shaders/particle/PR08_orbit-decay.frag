@@ -1,0 +1,3 @@
+float pr08Field(vec2 p,float t){float d=6.;for(int k=0;k<42;k++){float age=fract(t*.08+float(k)*.137);float r=1.15*(1.-age*.78);float a=float(k)*1.9+age*13.;vec2 q=r*vec2(cos(a),sin(a))*vec2(1.,.72);d=min(d,length(p-q));}return d;}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 pr08p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.4;float pr08angle=atan(pr08p.y,pr08p.x);float pr08radius=length(pr08p);float pr08v=pr08Field(vec2(pr08angle,pr08radius),iTime);float pr08arc=smoothstep(.09,.01,abs(pr08radius-.55-.18*sin(pr08v)));vec3 pr08c=mix(uColBg,uColDim,.3+.25*cos(pr08v));pr08c=mix(pr08c,uColPaper,pr08arc);pr08c+=uColSignal*.28*smoothstep(.3,0.,abs(pr08v));fragColor=vec4(pr08c,1.);}

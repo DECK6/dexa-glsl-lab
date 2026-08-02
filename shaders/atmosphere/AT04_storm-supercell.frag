@@ -1,0 +1,3 @@
+float at04Field(vec2 p,float t){float r=length(p),a=atan(p.y,p.x);float spiral=sin(4.*a-8.*r+t*.5);float wall=exp(-9.*pow(r-.65,2.));float core=exp(-10.*r*r);return spiral*wall-core*.8;}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 at04uv=fragCoord/iResolution.xy;vec2 at04cell=floor(at04uv*9.);vec2 at04local=fract(at04uv*9.)-.5;float at04v=at04Field((at04cell-4.)*.31+at04local*.18,iTime+dot(at04cell,vec2(.07,.11)));float at04glyph=smoothstep(.42,.08,abs(at04v));float at04frame=smoothstep(.48,.44,max(abs(at04local.x),abs(at04local.y)));vec3 at04c=mix(uColBg,uColInk,at04frame);at04c=mix(at04c,uColSignal,at04glyph*at04frame);at04c+=uColAccent*.2*(1.-at04frame);fragColor=vec4(at04c,1.);}

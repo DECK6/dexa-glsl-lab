@@ -1,0 +1,3 @@
+float ty08Field(vec2 p,float t){float outer=length(p*vec2(.8,1.))-.75;float inner=length((p-vec2(.12*sin(t*.4),0.))*vec2(.9,1.2))-.38;return max(outer,-inner);}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.4;float d=ty08Field(p,iTime);float fill=smoothstep(.035,-.035,d);float edge=smoothstep(.045,.005,abs(d));vec2 aperture=p-vec2(.12*sin(iTime*.4),0.);float orbit=pow(.5+.5*cos(atan(aperture.y,aperture.x)-iTime*1.7),12.);vec3 col=mix(uColBg,uColPaper,fill*.7);col=mix(col,uColInk,edge);col+=uColSignal*edge*orbit*.75+uColAccent*(1.-fill)*orbit*.12;fragColor=vec4(col,1.);}

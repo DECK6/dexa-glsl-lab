@@ -1,0 +1,3 @@
+float te04Field(vec2 p,float t){float r=length(p*vec2(.78,1.));float h=1.-r+.18*sin(p.x*5.)*sin(p.y*4.+t*.2);float crater=.32*exp(-8.*dot(p-vec2(.18,.08),p-vec2(.18,.08)));return h-crater;}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 te04uv=fragCoord/iResolution.xy;vec2 te04cell=floor(te04uv*9.);vec2 te04local=fract(te04uv*9.)-.5;float te04v=te04Field((te04cell-4.)*.31+te04local*.18,iTime+dot(te04cell,vec2(.07,.11)));float te04glyph=smoothstep(.42,.08,abs(te04v));float te04frame=smoothstep(.48,.44,max(abs(te04local.x),abs(te04local.y)));vec3 te04c=mix(uColBg,uColInk,te04frame);te04c=mix(te04c,uColSignal,te04glyph*te04frame);te04c+=uColAccent*.2*(1.-te04frame);fragColor=vec4(te04c,1.);}

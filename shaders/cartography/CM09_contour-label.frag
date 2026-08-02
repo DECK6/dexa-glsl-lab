@@ -1,0 +1,3 @@
+float cm09Field(vec2 p,float t){float h=sin(p.x*2.)+.7*cos(p.y*2.7+t*.1);float line=abs(fract(h*2.)-.5);float gap=max(abs(p.x)-.28,abs(p.y)-.1);return max(line,-gap);}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 cm09p=(fragCoord-.5*iResolution.xy)/iResolution.y*3.;vec2 cm09tile=floor(cm09p);vec2 cm09f=fract(cm09p)-.5;float cm09v=cm09Field(cm09f+cm09tile*.17,iTime+dot(cm09tile,vec2(.13,.19)));float cm09mark=smoothstep(.16,.01,abs(cm09v));float cm09edge=smoothstep(.49,.45,max(abs(cm09f.x),abs(cm09f.y)));vec3 cm09c=mix(uColBg,uColInk,cm09edge);cm09c=mix(cm09c,uColAccent,cm09mark);cm09c+=uColSignal*.22*(1.-cm09edge);fragColor=vec4(cm09c,1.);}

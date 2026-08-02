@@ -1,0 +1,3 @@
+float or07Field(vec2 p,float t){float bend=.12*sin(p.x*2.+t*.25);float fibers=sin((p.y-bend)*55.+4.*sin(p.x*3.));float crimp=sin(p.x*11.+p.y*2.-t*.35);return fibers*.32+crimp*.18;}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 or07p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.6;float or07warp=or07Field(or07p*.7,iTime);or07p+=.22*vec2(cos(or07warp*3.+iTime),sin(or07warp*2.-iTime));float or07v=or07Field(or07p,iTime);float or07ridge=exp(-3.5*abs(sin(or07v*4.)));vec3 or07c=mix(uColBg,uColInk,.55+.35*sin(or07v));or07c=mix(or07c,uColSignal,or07ridge);or07c+=uColAccent*.18*smoothstep(.8,1.,or07ridge);fragColor=vec4(or07c,1.);}

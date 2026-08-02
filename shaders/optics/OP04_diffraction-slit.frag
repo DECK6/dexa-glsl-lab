@@ -1,0 +1,3 @@
+float op04Field(vec2 p,float t){float y=p.y+.08*sin(t*.4);float beta=7.5*y;float envelope=pow(sin(beta)/max(abs(beta),.001),2.);float fringes=pow(cos(24.*y+1.2*p.x),2.);return envelope*fringes;}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 op04uv=fragCoord/iResolution.xy;vec2 op04cell=floor(op04uv*9.);vec2 op04local=fract(op04uv*9.)-.5;float op04v=op04Field((op04cell-4.)*.31+op04local*.18,iTime+dot(op04cell,vec2(.07,.11)));float op04glyph=smoothstep(.42,.08,abs(op04v));float op04frame=smoothstep(.48,.44,max(abs(op04local.x),abs(op04local.y)));vec3 op04c=mix(uColBg,uColInk,op04frame);op04c=mix(op04c,uColSignal,op04glyph*op04frame);op04c+=uColAccent*.2*(1.-op04frame);fragColor=vec4(op04c,1.);}

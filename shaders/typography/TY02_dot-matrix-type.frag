@@ -1,0 +1,3 @@
+float ty02Field(vec2 p,float t){vec2 q=(p+1.2)*vec2(4.,6.);vec2 cell=floor(q),f=fract(q)-.5;float pattern=step(.35,fract(sin(dot(cell,vec2(17.,43.)))*43758.+floor(t*.7)));return length(f)-(.16+.13*pattern);}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.8;float d=ty02Field(p,iTime);float dot=smoothstep(.08,.005,-d);float row=floor((p.y+1.2)*6.);float scan=pow(.5+.5*cos(row*.72-iTime*2.8),8.);float grid=smoothstep(.04,.0,abs(length(fract((p+1.2)*vec2(4.,6.))-.5)-.34));vec3 col=mix(uColBg,uColDim,.12+.16*grid);col=mix(col,uColPaper,dot*.62);col+=uColSignal*dot*(.2+.9*scan)+uColAccent*grid*scan*.22;fragColor=vec4(col,1.);}

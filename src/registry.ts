@@ -1,35 +1,8 @@
+import { CATEGORIES, categoryById } from './catalog'
 import type { CategoryId, ShaderMeta } from './types'
 
-export interface Category {
-  id: CategoryId
-  label: string
-  /** two-letter ID prefix — RM01..RM10 live in raymarch/ (SPEC §4) */
-  prefix: string
-}
-
-// Display order of the filter chips (SPEC §5). Shader order is by id.
-export const CATEGORIES: Category[] = [
-  { id: 'raymarch', label: 'RAYMARCH', prefix: 'RM' },
-  { id: 'sdf', label: 'SDF', prefix: 'SD' },
-  { id: 'fractal', label: 'FRACTAL', prefix: 'FR' },
-  { id: 'noise', label: 'NOISE', prefix: 'NS' },
-  { id: 'flow', label: 'FLOW', prefix: 'FL' },
-  { id: 'pattern', label: 'PATTERN', prefix: 'PT' },
-  { id: 'tiling', label: 'TILING', prefix: 'TL' },
-  { id: 'truchet', label: 'TRUCHET', prefix: 'TR' },
-  { id: 'color', label: 'COLOR', prefix: 'CL' },
-  { id: 'light', label: 'LIGHT', prefix: 'LT' },
-  { id: 'water', label: 'WATER', prefix: 'WT' },
-  { id: 'fire', label: 'FIRE', prefix: 'FI' },
-  { id: 'smoke', label: 'SMOKE', prefix: 'SM' },
-  { id: 'space', label: 'SPACE', prefix: 'SP' },
-  { id: 'geometry', label: 'GEOMETRY', prefix: 'GE' },
-  { id: 'glitch', label: 'GLITCH', prefix: 'GL' },
-  { id: 'moire', label: 'MOIRE', prefix: 'MO' },
-  { id: 'warp', label: 'WARP', prefix: 'WP' },
-  { id: 'cellular', label: 'CELLULAR', prefix: 'CA' },
-  { id: 'minimal', label: 'MINIMAL', prefix: 'MN' },
-]
+export { CATEGORIES }
+export type { Category } from './catalog'
 
 export interface ShaderEntry {
   meta: ShaderMeta
@@ -68,5 +41,5 @@ export function byId(id: string): ShaderEntry | undefined {
 }
 
 export function categoryLabel(id: CategoryId): string {
-  return CATEGORIES.find((category) => category.id === id)?.label ?? id.toUpperCase()
+  return categoryById(id)?.label ?? id.toUpperCase()
 }

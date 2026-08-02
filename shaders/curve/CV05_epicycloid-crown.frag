@@ -1,0 +1,3 @@
+float cv05Field(vec2 p,float t){float nearest=7.;float k=5.+floor(1.5+.5*sin(t*.2));for(int i=0;i<100;i++){float a=6.28318*float(i)/100.;vec2 q=(k+1.)/k*vec2(cos(a),sin(a))-.28*vec2(cos((k+1.)*a),sin((k+1.)*a));nearest=min(nearest,length(p-q*.72));}return nearest;}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 cv05p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.7;float cv05sum=0.;for(int cv05i=0;cv05i<18;cv05i++){float cv05s=float(cv05i)/17.;vec2 cv05d=.36*cv05s*vec2(cos(cv05s*9.+iTime*.2),sin(cv05s*7.));cv05sum+=exp(-4.*abs(cv05Field(cv05p+cv05d,iTime-cv05s)));}float cv05ink=1.-exp(-cv05sum*.16);vec3 cv05c=mix(uColBg,uColDim,.35);cv05c=mix(cv05c,uColSignal,cv05ink);cv05c+=uColPaper*.18*cv05ink+uColAccent*.12*sin(cv05sum);fragColor=vec4(cv05c,1.);}

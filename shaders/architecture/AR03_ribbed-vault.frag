@@ -1,0 +1,3 @@
+float ar03Field(vec2 p,float t){p.x+=.08*sin(t*.2);float a=abs(length(p-vec2(-.75,-.7))-1.05);float b=abs(length(p-vec2(.75,-.7))-1.05);float spine=abs(p.x)*.7;return min(min(a,b),spine);}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 ar03p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.2;float ar03a=ar03Field(ar03p,iTime);float ar03b=ar03Field(mat2(.8,-.6,.6,.8)*ar03p*1.17,-iTime*.73);float ar03cross=smoothstep(.18,.01,abs(ar03a-ar03b));vec3 ar03col=mix(uColInk,uColPaper,.5+.5*sin(ar03a*5.));ar03col=mix(ar03col,uColSignal,ar03cross);ar03col=mix(uColBg,ar03col,smoothstep(.02,.75,abs(ar03a)+abs(ar03b)));fragColor=vec4(ar03col,1.);}

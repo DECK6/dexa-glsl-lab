@@ -1,0 +1,3 @@
+float mc07Gear(vec2 p,float phase,float teeth){float a=atan(p.y,p.x),r=length(p);return abs(r-(.24+.04*sin(teeth*a+phase)));} float mc07Field(vec2 p,float t){float d=mc07Gear(p,t,10.);for(int k=0;k<3;k++){float a=6.28318*float(k)/3.+t*.25;vec2 c=.58*vec2(cos(a),sin(a));d=min(d,mc07Gear(p-c,-t*1.5,8.));}return d;}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 mc07p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.6;float mc07warp=mc07Field(mc07p*.7,iTime);mc07p+=.22*vec2(cos(mc07warp*3.+iTime),sin(mc07warp*2.-iTime));float mc07v=mc07Field(mc07p,iTime);float mc07ridge=exp(-3.5*abs(sin(mc07v*4.)));vec3 mc07c=mix(uColBg,uColInk,.55+.35*sin(mc07v));mc07c=mix(mc07c,uColSignal,mc07ridge);mc07c+=uColAccent*.18*smoothstep(.8,1.,mc07ridge);fragColor=vec4(mc07c,1.);}

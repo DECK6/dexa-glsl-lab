@@ -1,0 +1,3 @@
+float ty05Field(vec2 p,float t){float center=.45*sin(p.y*2.4+t*.35);float ribbon=abs(p.x-center)-(.13+.05*cos(p.y*5.));float cross=abs(p.y)-.08+.2*step(.2,abs(p.x));return min(abs(ribbon),abs(cross));}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 ty05p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.7;float ty05sum=0.;for(int ty05i=0;ty05i<18;ty05i++){float ty05s=float(ty05i)/17.;vec2 ty05d=.36*ty05s*vec2(cos(ty05s*9.+iTime*.2),sin(ty05s*7.));ty05sum+=exp(-4.*abs(ty05Field(ty05p+ty05d,iTime-ty05s)));}float ty05ink=1.-exp(-ty05sum*.16);vec3 ty05c=mix(uColBg,uColDim,.35);ty05c=mix(ty05c,uColSignal,ty05ink);ty05c+=uColPaper*.18*ty05ink+uColAccent*.12*sin(ty05sum);fragColor=vec4(ty05c,1.);}

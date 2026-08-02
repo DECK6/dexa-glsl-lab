@@ -1,0 +1,3 @@
+float ar02Field(vec2 p,float t){vec2 q=p*vec2(3.,4.);vec2 f=fract(q)-.5;float window=max(abs(f.x)-.23,abs(f.y)-.3);float mullion=min(abs(fract(q.x*.5+t*.03)-.5),abs(fract(q.y)-.5));return min(abs(window),mullion*.6);}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 ar02q=(fragCoord-.5*iResolution.xy)/iResolution.y*2.8;float ar02f=ar02Field(ar02q,iTime);float ar02line=smoothstep(.12,.015,abs(fract(ar02f*.75)-.5));float ar02halo=smoothstep(.45,.02,abs(ar02f));vec3 ar02c=mix(uColBg,uColDim,.22+.35*ar02halo);ar02c=mix(ar02c,uColPaper,ar02line);ar02c+=uColSignal*ar02halo*.35+uColAccent*ar02line*.18;fragColor=vec4(ar02c,1.);}

@@ -1,0 +1,3 @@
+float at08Field(vec2 p,float t){float x=p.x+.55;float center=.35*x*x-.45+.18*sin(x*5.+t*.4);float trail=abs(p.y-center);float head=length(p-vec2(.75,.35+.12*sin(t)));return min(trail+.12*max(x,0.),head);}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 at08p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.4;float at08angle=atan(at08p.y,at08p.x);float at08radius=length(at08p);float at08v=at08Field(vec2(at08angle,at08radius),iTime);float at08arc=smoothstep(.09,.01,abs(at08radius-.55-.18*sin(at08v)));vec3 at08c=mix(uColBg,uColDim,.3+.25*cos(at08v));at08c=mix(at08c,uColPaper,at08arc);at08c+=uColSignal*.28*smoothstep(.3,0.,abs(at08v));fragColor=vec4(at08c,1.);}

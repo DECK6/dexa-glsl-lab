@@ -1,0 +1,3 @@
+float cx06Field(vec2 p,float t){float r2=max(dot(p,p),.035);vec2 q=p/r2;float a=.35*sin(t*.45);q=mat2(cos(a),-sin(a),sin(a),cos(a))*q;return sin(q.x*3.2)+sin(q.y*4.1)+.4*length(p);}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 cx06p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.3;float cx06e=.008;float cx06v=cx06Field(cx06p,iTime);vec2 cx06g=vec2(cx06Field(cx06p+vec2(cx06e,0.),iTime)-cx06v,cx06Field(cx06p+vec2(0.,cx06e),iTime)-cx06v)/cx06e;vec3 cx06normal=normalize(vec3(-cx06g,1.));float cx06lit=.5+.5*dot(cx06normal,normalize(vec3(.7,.5,1.)));vec3 cx06c=mix(uColInk,uColPaper,cx06lit);cx06c=mix(cx06c,uColSignal,smoothstep(.12,.01,abs(cx06v)));cx06c=mix(uColBg,cx06c,smoothstep(.02,.35,length(cx06g)));fragColor=vec4(cx06c,1.);}

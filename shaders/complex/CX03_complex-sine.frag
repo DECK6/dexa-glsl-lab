@@ -1,0 +1,3 @@
+float cx03Field(vec2 p,float t){float re=sin(p.x+sin(t*.2))*cosh(clamp(p.y,-2.,2.));float im=cos(p.x)*sinh(clamp(p.y+.2*sin(t),-2.,2.));return atan(im,re)+.18*log(1.+re*re+im*im);}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 cx03p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.2;float cx03a=cx03Field(cx03p,iTime);float cx03b=cx03Field(mat2(.8,-.6,.6,.8)*cx03p*1.17,-iTime*.73);float cx03cross=smoothstep(.18,.01,abs(cx03a-cx03b));vec3 cx03col=mix(uColInk,uColPaper,.5+.5*sin(cx03a*5.));cx03col=mix(cx03col,uColSignal,cx03cross);cx03col=mix(uColBg,cx03col,smoothstep(.02,.75,abs(cx03a)+abs(cx03b)));fragColor=vec4(cx03col,1.);}

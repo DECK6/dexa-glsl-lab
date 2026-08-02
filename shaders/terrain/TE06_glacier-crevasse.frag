@@ -1,0 +1,3 @@
+float te06Field(vec2 p,float t){float bend=p.x+.18*sin(p.y*2.+t*.12);float cracks=abs(sin(bend*13.+sin(p.y*5.)));float compression=.25*sin(p.y*8.-t*.18);return cracks-.18+compression;}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 te06p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.3;float te06e=.008;float te06v=te06Field(te06p,iTime);vec2 te06g=vec2(te06Field(te06p+vec2(te06e,0.),iTime)-te06v,te06Field(te06p+vec2(0.,te06e),iTime)-te06v)/te06e;vec3 te06normal=normalize(vec3(-te06g,1.));float te06lit=.5+.5*dot(te06normal,normalize(vec3(.7,.5,1.)));vec3 te06c=mix(uColInk,uColPaper,te06lit);te06c=mix(te06c,uColSignal,smoothstep(.12,.01,abs(te06v)));te06c=mix(uColBg,te06c,smoothstep(.02,.35,length(te06g)));fragColor=vec4(te06c,1.);}

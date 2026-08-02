@@ -1,0 +1,3 @@
+float mt03Field(vec2 p,float t){float r=length(p*.82);float normal=sqrt(max(0.,1.-r*r));float thickness=.5+.18*sin(p.x*5.+p.y*3.);return sin(16.*(1.-normal)+9.*thickness+t*.35)+.35*normal;}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 mt03p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.2;float mt03a=mt03Field(mt03p,iTime);float mt03b=mt03Field(mat2(.8,-.6,.6,.8)*mt03p*1.17,-iTime*.73);float mt03cross=smoothstep(.18,.01,abs(mt03a-mt03b));vec3 mt03col=mix(uColInk,uColPaper,.5+.5*sin(mt03a*5.));mt03col=mix(mt03col,uColSignal,mt03cross);mt03col=mix(uColBg,mt03col,smoothstep(.02,.75,abs(mt03a)+abs(mt03b)));fragColor=vec4(mt03col,1.);}

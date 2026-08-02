@@ -1,0 +1,3 @@
+float ty06Field(vec2 p,float t){float outer=max(abs(p.x)-.65,abs(p.y)-.8);float inner=max(abs(p.x)-.32,abs(p.y)-.52);float bridge=max(abs(p.x+.15*sin(t*.3))-.1,abs(p.y)-.9);return max(outer,-min(inner,bridge));}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 ty06p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.3;float ty06e=.008;float ty06v=ty06Field(ty06p,iTime);vec2 ty06g=vec2(ty06Field(ty06p+vec2(ty06e,0.),iTime)-ty06v,ty06Field(ty06p+vec2(0.,ty06e),iTime)-ty06v)/ty06e;vec3 ty06normal=normalize(vec3(-ty06g,1.));float ty06lit=.5+.5*dot(ty06normal,normalize(vec3(.7,.5,1.)));vec3 ty06c=mix(uColInk,uColPaper,ty06lit);ty06c=mix(ty06c,uColSignal,smoothstep(.12,.01,abs(ty06v)));ty06c=mix(uColBg,ty06c,smoothstep(.02,.35,length(ty06g)));fragColor=vec4(ty06c,1.);}

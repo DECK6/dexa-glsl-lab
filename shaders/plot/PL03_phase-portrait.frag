@@ -1,0 +1,3 @@
+float pl03Field(vec2 p,float t){vec2 cell=floor((p+2.)*4.);vec2 q=fract((p+2.)*4.)-.5;vec2 c=(cell+.5)/4.-2.;vec2 v=normalize(vec2(c.y,-c.x+.32*sin(c.y*2.+t*.3)));float shaft=abs(dot(q,vec2(-v.y,v.x)));float along=dot(q,v);return shaft+max(abs(along)-.32,0.)+step(along,.05)*.08;}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 pl03p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.2;float pl03a=pl03Field(pl03p,iTime);float pl03b=pl03Field(mat2(.8,-.6,.6,.8)*pl03p*1.17,-iTime*.73);float pl03cross=smoothstep(.18,.01,abs(pl03a-pl03b));vec3 pl03col=mix(uColInk,uColPaper,.5+.5*sin(pl03a*5.));pl03col=mix(pl03col,uColSignal,pl03cross);pl03col=mix(uColBg,pl03col,smoothstep(.02,.75,abs(pl03a)+abs(pl03b)));fragColor=vec4(pl03col,1.);}

@@ -1,0 +1,3 @@
+float at06Field(vec2 p,float t){float horizon=exp(-6.*abs(p.y+.25));float sun=exp(-12.*length(p-vec2(.55*sin(t*.08),-.18)));float bands=.5+.5*sin((p.y+.3)*32.+p.x*2.);return horizon*(.45+.55*bands)+sun;}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 at06p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.3;float at06e=.008;float at06v=at06Field(at06p,iTime);vec2 at06g=vec2(at06Field(at06p+vec2(at06e,0.),iTime)-at06v,at06Field(at06p+vec2(0.,at06e),iTime)-at06v)/at06e;vec3 at06normal=normalize(vec3(-at06g,1.));float at06lit=.5+.5*dot(at06normal,normalize(vec3(.7,.5,1.)));vec3 at06c=mix(uColInk,uColPaper,at06lit);at06c=mix(at06c,uColSignal,smoothstep(.12,.01,abs(at06v)));at06c=mix(uColBg,at06c,smoothstep(.02,.35,length(at06g)));fragColor=vec4(at06c,1.);}

@@ -1,0 +1,3 @@
+float op03Field(vec2 p,float t){float thickness=.55+.24*sin(p.x*2.1+t*.3)+.18*sin(p.y*3.4-t*.2);float a=sin(18.*thickness+length(p)*5.);float b=sin(23.*thickness-p.x*4.);return .5+.25*a+.25*b;}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 op03p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.2;float op03a=op03Field(op03p,iTime);float op03b=op03Field(mat2(.8,-.6,.6,.8)*op03p*1.17,-iTime*.73);float op03cross=smoothstep(.18,.01,abs(op03a-op03b));vec3 op03col=mix(uColInk,uColPaper,.5+.5*sin(op03a*5.));op03col=mix(op03col,uColSignal,op03cross);op03col=mix(uColBg,op03col,smoothstep(.02,.75,abs(op03a)+abs(op03b)));fragColor=vec4(op03col,1.);}

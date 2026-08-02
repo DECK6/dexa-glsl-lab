@@ -1,0 +1,3 @@
+float cx09Field(vec2 p,float t){float angle=atan(p.y,p.x)+t*.16;float radius=pow(max(length(p),.002),.58+.08*sin(t*.3));vec2 w=radius*vec2(cos(angle*.58),sin(angle*.58));return w.x*2.4+sin(w.y*7.);}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 cx09p=(fragCoord-.5*iResolution.xy)/iResolution.y*3.;vec2 cx09tile=floor(cx09p);vec2 cx09f=fract(cx09p)-.5;float cx09v=cx09Field(cx09f+cx09tile*.17,iTime+dot(cx09tile,vec2(.13,.19)));float cx09mark=smoothstep(.16,.01,abs(cx09v));float cx09edge=smoothstep(.49,.45,max(abs(cx09f.x),abs(cx09f.y)));vec3 cx09c=mix(uColBg,uColInk,cx09edge);cx09c=mix(cx09c,uColAccent,cx09mark);cx09c+=uColSignal*.22*(1.-cx09edge);fragColor=vec4(cx09c,1.);}

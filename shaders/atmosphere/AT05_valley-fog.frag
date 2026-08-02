@@ -1,0 +1,3 @@
+float at05Field(vec2 p,float t){float floor=-.55+.18*sin(p.x*2.4);float height=p.y-floor;float layers=sin(height*18.+p.x*2.-t*.3);return exp(-2.8*max(height,0.))*(.7+.3*layers);}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 at05p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.7;float at05sum=0.;for(int at05i=0;at05i<18;at05i++){float at05s=float(at05i)/17.;vec2 at05d=.36*at05s*vec2(cos(at05s*9.+iTime*.2),sin(at05s*7.));at05sum+=exp(-4.*abs(at05Field(at05p+at05d,iTime-at05s)));}float at05ink=1.-exp(-at05sum*.16);vec3 at05c=mix(uColBg,uColDim,.35);at05c=mix(at05c,uColSignal,at05ink);at05c+=uColPaper*.18*at05ink+uColAccent*.12*sin(at05sum);fragColor=vec4(at05c,1.);}

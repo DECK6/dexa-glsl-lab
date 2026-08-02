@@ -1,0 +1,3 @@
+float cv09Field(vec2 p,float t){float a=atan(p.y,p.x);float r=length(p);float petals=abs(cos(5.*a+t*.22));float second=.62*abs(sin(3.*a-t*.17));return min(abs(r-petals),abs(r-second));}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 cv09p=(fragCoord-.5*iResolution.xy)/iResolution.y*3.;vec2 cv09tile=floor(cv09p);vec2 cv09f=fract(cv09p)-.5;float cv09v=cv09Field(cv09f+cv09tile*.17,iTime+dot(cv09tile,vec2(.13,.19)));float cv09mark=smoothstep(.16,.01,abs(cv09v));float cv09edge=smoothstep(.49,.45,max(abs(cv09f.x),abs(cv09f.y)));vec3 cv09c=mix(uColBg,uColInk,cv09edge);cv09c=mix(cv09c,uColAccent,cv09mark);cv09c+=uColSignal*.22*(1.-cv09edge);fragColor=vec4(cv09c,1.);}

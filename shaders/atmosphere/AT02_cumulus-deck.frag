@@ -1,0 +1,3 @@
+float at02Hash(vec2 p){return fract(sin(dot(p,vec2(41.,289.))+uSeed)*43758.);} float at02Field(vec2 p,float t){float d=0.,a=.55;for(int k=0;k<5;k++){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);float n=mix(mix(at02Hash(i),at02Hash(i+vec2(1,0)),f.x),mix(at02Hash(i+vec2(0,1)),at02Hash(i+1.),f.x),f.y);d+=a*n;p=p*2.03+vec2(.17,-t*.05);a*=.52;}return d-p.y*.08;}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 at02q=(fragCoord-.5*iResolution.xy)/iResolution.y*2.8;float at02f=at02Field(at02q,iTime);float at02line=smoothstep(.12,.015,abs(fract(at02f*.75)-.5));float at02halo=smoothstep(.45,.02,abs(at02f));vec3 at02c=mix(uColBg,uColDim,.22+.35*at02halo);at02c=mix(at02c,uColPaper,at02line);at02c+=uColSignal*at02halo*.35+uColAccent*at02line*.18;fragColor=vec4(at02c,1.);}

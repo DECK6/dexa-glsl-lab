@@ -1,6 +1,6 @@
 # DEXA GLSL LAB
 
-**200 pure GLSL fragment shaders** in a live WebGL2 catalog with an in-browser editor.
+**500 differentiated GLSL works** in a live WebGL2 catalog with an in-browser editor.
 
 **Live:** https://dexa.art/glsl/
 
@@ -14,16 +14,17 @@
 
 DEXA GLSL LAB is a browser-based catalog for watching, studying, and editing fragment shaders. Every work is animated, seed-aware, palette-controlled, and presented with its complete author source.
 
-- **200 shaders** — 20 categories with 10 distinct works each
-- **Live gallery** — filter by category, search by ID/title/tag, and preview on hover or keyboard focus with a three-context budget
+- **500 shaders** — Core 350 + Buffer 100 + Input 50, organized as 50 categories with 10 distinct works each
+- **Live gallery** — filter by domain, runtime tier, or category; search by ID/title/tag; preview on hover or keyboard focus
 - **Workbench detail** — regenerate the seed, navigate related works, copy the source, and watch edits recompile after a 350 ms debounce
 - **Resilient live editing** — compile errors report author-source line numbers while the last valid program keeps rendering
-- **Deterministic captures** — fixed time, frame, seed, palette, and square viewport make thumbnails and visual audits reproducible
+- **Three runtime tiers** — single-pass Core, stateful ping-pong Buffer, and deterministic texture-driven Input
+- **Deterministic captures** — fixed seed, fixtures, palette, viewport, and a 90-frame Buffer warm-up make audits reproducible
 - **Drop-in registry** — add a matching metadata/fragment pair and Vite discovers it without a central manifest
 
 ## Shader contract
 
-Each `.frag` file contains helpers plus one Shadertoy-style entry point:
+Every `.frag` contains a Shadertoy-style image entry point:
 
 ```glsl
 void mainImage(out vec4 fragColor, in vec2 fragCoord)
@@ -35,16 +36,25 @@ The WebGL2 runner owns the version, precision, uniforms, output, and final `main
 |---|---|---|
 | `iResolution` | `vec3` | square canvas resolution in pixels |
 | `iTime` | `float` | elapsed animation time |
+| `iTimeDelta` | `float` | frame delta for stateful simulation |
 | `iMouse` | `vec4` | pointer and last-click coordinates |
 | `iFrame` | `int` | frame counter |
 | `uSeed` | `float` | deterministic variation seed |
 | `uColBg` … `uColDim` | `vec3` | central DEXA palette uniforms |
+| `iChannel0/1` | `sampler2D` | Buffer state or deterministic Input fixtures |
+| `iChannelResolution` | `vec3[2]` | channel dimensions |
 
-Registry lint requires animation through `iTime`, at least one palette uniform, exact file-pair metadata, and the category's `01..10` ID range. It rejects author-owned preludes, channel textures, legacy outputs, and inline runner declarations.
+Buffer works additionally provide `mainBuffer(out vec4, in vec2)`; the runner advances two RGBA8 state textures before `mainImage`. Input works sample deterministic image, camera, composite, environment, or audio fixtures. Registry lint enforces the tier-specific channel contract, animation, palette use, exact metadata pairs, and each category's `01..10` range.
 
 ## Categories
 
-RAYMARCH · SDF · FRACTAL · NOISE · FLOW · PATTERN · TILING · TRUCHET · COLOR · LIGHT · WATER · FIRE · SMOKE · SPACE · GEOMETRY · GLITCH · MOIRE · WARP · CELLULAR · MINIMAL
+| domain | categories |
+|---|---|
+| FORM | SDF, Pattern, Tiling, Truchet, Geometry, Minimal, Curve, Plot, Typography, Mechanism, Topology |
+| FIELD | Fractal, Noise, Flow, Color, Moire, Warp, Cellular, Complex, Optics, Material, Particle |
+| WORLD | Raymarch, Light, Water, Fire, Smoke, Space, Terrain, Atmosphere, Volume, Architecture, Organic, Cartography |
+| SIM | Automata, Reaction, Fluid, Wave Sim, Growth, Swarm, Erosion, Feedback, Progressive, Digital Paint |
+| MEDIA | Glitch, Convolution, Vision, Compositing, Environment, Audio |
 
 Each category contains 10 works. The implementation and quality ledgers are documented in [`docs/PROGRESS.md`](docs/PROGRESS.md) and [`docs/QUALITY_AUDIT.md`](docs/QUALITY_AUDIT.md).
 
@@ -53,13 +63,13 @@ Each category contains 10 works. The implementation and quality ledgers are docu
 ```bash
 bun install
 bun run dev             # gallery at http://localhost:5173/glsl/
-bun run lint:registry   # file pairs, metadata, authoring contract, 20 × 10 inventory
-bun run audit:shaders   # WebGL compile, blank, motion, and near-duplicate gates
+bun run lint:registry   # file pairs, tier contract, and 50 × 10 inventory
+bun run audit:shaders   # production runner, blank, motion, and near-duplicate gates
 bun run typecheck
 bun run build
-bun run thumbs          # render all 200 deterministic thumbnails
-bun run audit:contacts  # build 20 labeled category contact sheets
-bun run test:e2e        # product shell, live editor, and 200-shader alive checks
+bun run thumbs          # render all 500 deterministic thumbnails
+bun run audit:contacts  # build 50 labeled category contact sheets
+bun run test:e2e        # product shell, live editor, and 500-shader alive checks
 bun run deploy          # copy the production site to the adxdeck /glsl target
 ```
 
@@ -77,8 +87,9 @@ Metadata is loaded eagerly for gallery discovery. Fragment source and raw editor
 ## Architecture
 
 - Vanilla TypeScript + Vite
-- Dependency-free WebGL2 full-screen-triangle runner
+- Dependency-free WebGL2 full-screen-triangle runner with ping-pong framebuffer state
 - Hash routing for gallery, detail, ABOUT, and chromeless preview harnesses
+- Generated deterministic fixtures for image, camera, composite, environment, and audio inputs
 - Shared Ink + Cyan + Orange DEXA palette supplied as uniforms
 - Lazy shader/source modules with a three-context gallery runtime budget
 - Playwright thumbnail, live-edit, and alive-render gates
@@ -88,7 +99,7 @@ Metadata is loaded eagerly for gallery discovery. Fragment source and raw editor
 
 - [`docs/SPEC.md`](docs/SPEC.md) — product architecture, runtime contract, routes, and deployment
 - [`docs/AUTHORING.md`](docs/AUTHORING.md) — shader and metadata authoring contract
-- [`docs/PROGRESS.md`](docs/PROGRESS.md) — 200-work implementation and delivery ledger
+- [`docs/PROGRESS.md`](docs/PROGRESS.md) — 500-work implementation and delivery ledger
 - [`docs/QUALITY_AUDIT.md`](docs/QUALITY_AUDIT.md) — automated thresholds, visual review, and corrected regressions
 
-Accepted through registry lint, WebGL compilation and duplicate gates for all 200 shaders, TypeScript, production build, 200 thumbnails, 20 category contact sheets, and 203 Playwright checks.
+Accepted through strict registry lint, production-runner compile and duplicate gates for all 500 shaders, TypeScript, production build, 500 thumbnails, 50 category contact sheets, and 503 Playwright checks.

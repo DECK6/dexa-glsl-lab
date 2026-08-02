@@ -14,39 +14,19 @@
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { CATALOG_TOTAL, CATEGORIES } from '../src/catalog.ts'
 
 const ROOT = dirname(dirname(fileURLToPath(import.meta.url)))
 const SHADERS = join(ROOT, 'shaders')
 
-const PREFIXES = {
-  raymarch: 'RM',
-  sdf: 'SD',
-  fractal: 'FR',
-  noise: 'NS',
-  flow: 'FL',
-  pattern: 'PT',
-  tiling: 'TL',
-  truchet: 'TR',
-  color: 'CL',
-  light: 'LT',
-  water: 'WT',
-  fire: 'FI',
-  smoke: 'SM',
-  space: 'SP',
-  geometry: 'GE',
-  glitch: 'GL',
-  moire: 'MO',
-  warp: 'WP',
-  cellular: 'CA',
-  minimal: 'MN',
-}
+const allowIncomplete = process.argv.includes('--allow-incomplete')
+const categoryById = new Map(CATEGORIES.map((category) => [category.id, category]))
+const PREFIXES = Object.fromEntries(CATEGORIES.map((category) => [category.id, category.prefix]))
 
 const FORBIDDEN = [
   [/#version/, '#version directive — the runner prelude owns it'],
   [/precision\s+(lowp|mediump|highp)\s+float/, 'precision statement — the runner prelude owns it'],
   [/gl_FragColor/, 'gl_FragColor — write to the mainImage out parameter (GLSL ES 3.0)'],
-  [/iChannel\d/, 'iChannel — single-pass catalog, no texture inputs'],
-  [/\btexture\s*\(/, 'texture() — single-pass catalog, no texture inputs'],
   [/^\s*out\s+vec4\s/m, 'global out declaration — the runner prelude owns it'],
   [/\buniform\s/, 'uniform declaration — the runner prelude owns all uniforms'],
 ]
@@ -147,6 +127,20 @@ for (const category of readdirSync(SHADERS)) {
       for (const [pattern, message] of REQUIRED) {
         if (!pattern.test(source)) errors.push(`${where}: missing ${message}`)
       }
+      const runtime = categoryById.get(category)?.runtime
+      const samplesChannel = /\biChannel[01]\b/.test(source)
+      const samplesTexture = /\b(?:texture|texelFetch)\s*\(/.test(source)
+      if (runtime === 'core') {
+        if (samplesChannel) errors.push(`${where}: core shaders cannot reference iChannel inputs`)
+        if (samplesTexture) errors.push(`${where}: core shaders cannot sample textures`)
+      } else {
+        if (!samplesChannel) errors.push(`${where}: ${runtime} shaders must reference iChannel0 or iChannel1`)
+        if (!samplesTexture) errors.push(`${where}: ${runtime} shaders must sample texture input`)
+      }
+      if (runtime === 'buffer') {
+        const hasBuffer = /void\s+mainBuffer\s*\(\s*out\s+vec4\s+\w+\s*,\s*in\s+vec2\s+\w+\s*\)/.test(source)
+        if (!hasBuffer) errors.push(`${where}: buffer shaders require mainBuffer(out vec4, in vec2)`)
+      }
       continue
     }
 
@@ -154,16 +148,21 @@ for (const category of readdirSync(SHADERS)) {
   }
 }
 
-for (const [category, prefix] of Object.entries(PREFIXES)) {
+for (const { id: category, prefix, count } of CATEGORIES) {
   const found = inventory.get(category)
-  const expected = Array.from({ length: 10 }, (_, index) => `${prefix}${String(index + 1).padStart(2, '0')}`)
+  const expected = Array.from({ length: count }, (_, index) => `${prefix}${String(index + 1).padStart(2, '0')}`)
   for (const kind of ['meta', 'frag']) {
     const actual = found[kind]
-    if (actual.size !== expected.length) {
+    if (!allowIncomplete && actual.size !== expected.length) {
       errors.push(`count: shaders/${category} must contain 10 ${kind} files, found ${actual.size}`)
     }
-    for (const id of expected) {
-      if (!actual.has(id)) errors.push(`catalog: shaders/${category} is missing ${id} ${kind}`)
+    if (allowIncomplete && actual.size > expected.length) {
+      errors.push(`count: shaders/${category} contains more than ${count} ${kind} files`)
+    }
+    if (!allowIncomplete) {
+      for (const id of expected) {
+        if (!actual.has(id)) errors.push(`catalog: shaders/${category} is missing ${id} ${kind}`)
+      }
     }
     for (const id of actual) {
       if (!expected.includes(id)) errors.push(`catalog: shaders/${category} has out-of-range ${id} ${kind}`)
@@ -171,12 +170,16 @@ for (const [category, prefix] of Object.entries(PREFIXES)) {
   }
 }
 
-if (ids.size !== 200) errors.push(`catalog: expected 200 meta entries, found ${ids.size}`)
-if (fragCount !== 200) errors.push(`catalog: expected 200 fragment shaders, found ${fragCount}`)
+if (!allowIncomplete && ids.size !== CATALOG_TOTAL) {
+  errors.push(`catalog: expected ${CATALOG_TOTAL} meta entries, found ${ids.size}`)
+}
+if (!allowIncomplete && fragCount !== CATALOG_TOTAL) {
+  errors.push(`catalog: expected ${CATALOG_TOTAL} fragment shaders, found ${fragCount}`)
+}
 
 if (errors.length) {
   console.error(`lint:registry — ${errors.length} error(s):`)
   for (const error of errors) console.error(`  ✗ ${error}`)
   process.exit(1)
 }
-console.log(`lint:registry — OK (${ids.size} meta / ${fragCount} frag)`)
+console.log(`lint:registry — OK (${ids.size} meta / ${fragCount} frag${allowIncomplete ? ', partial target' : ''})`)

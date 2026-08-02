@@ -1,24 +1,6 @@
-export type CategoryId =
-  | 'raymarch'
-  | 'sdf'
-  | 'fractal'
-  | 'noise'
-  | 'flow'
-  | 'pattern'
-  | 'tiling'
-  | 'truchet'
-  | 'color'
-  | 'light'
-  | 'water'
-  | 'fire'
-  | 'smoke'
-  | 'space'
-  | 'geometry'
-  | 'glitch'
-  | 'moire'
-  | 'warp'
-  | 'cellular'
-  | 'minimal'
+import type { CategoryId } from './catalog'
+
+export type { CategoryId } from './catalog'
 
 export interface ShaderMeta {
   id: string

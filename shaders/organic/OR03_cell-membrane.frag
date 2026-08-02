@@ -1,0 +1,3 @@
+float or03Field(vec2 p,float t){float mid=.18*sin(p.x*3.+t*.4);float layer=min(abs(p.y-mid-.16),abs(p.y-mid+.16));float heads=abs(fract(p.x*6.+.5*sin(p.y*4.))-.5);return min(layer,heads*.14+abs(abs(p.y-mid)-.16));}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 or03p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.2;float or03a=or03Field(or03p,iTime);float or03b=or03Field(mat2(.8,-.6,.6,.8)*or03p*1.17,-iTime*.73);float or03cross=smoothstep(.18,.01,abs(or03a-or03b));vec3 or03col=mix(uColInk,uColPaper,.5+.5*sin(or03a*5.));or03col=mix(or03col,uColSignal,or03cross);or03col=mix(uColBg,or03col,smoothstep(.02,.75,abs(or03a)+abs(or03b)));fragColor=vec4(or03col,1.);}

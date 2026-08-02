@@ -1,0 +1,3 @@
+float cv08Field(vec2 p,float t){float sag=.42+.12*sin(t*.45);float y=sag*cosh(clamp(p.x/max(sag,.12),-4.,4.))-sag*cosh(1.3/max(sag,.12));return abs(p.y-y)+.08*abs(sin(p.x*7.+t)-.2);}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 cv08p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.4;float cv08angle=atan(cv08p.y,cv08p.x);float cv08radius=length(cv08p);float cv08v=cv08Field(vec2(cv08angle,cv08radius),iTime);float cv08arc=smoothstep(.09,.01,abs(cv08radius-.55-.18*sin(cv08v)));vec3 cv08c=mix(uColBg,uColDim,.3+.25*cos(cv08v));cv08c=mix(cv08c,uColPaper,cv08arc);cv08c+=uColSignal*.28*smoothstep(.3,0.,abs(cv08v));fragColor=vec4(cv08c,1.);}

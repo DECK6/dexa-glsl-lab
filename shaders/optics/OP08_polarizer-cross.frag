@@ -1,0 +1,3 @@
+float op08Field(vec2 p,float t){float angle=atan(p.y,p.x);float axis=t*.23+.35*sin(length(p)*4.);float malus=pow(cos(angle-axis),2.);float retard=.5+.5*cos(9.*length(p)+2.*angle);return malus*retard;}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 op08p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.4;float op08angle=atan(op08p.y,op08p.x);float op08radius=length(op08p);float op08v=op08Field(vec2(op08angle,op08radius),iTime);float op08arc=smoothstep(.09,.01,abs(op08radius-.55-.18*sin(op08v)));vec3 op08c=mix(uColBg,uColDim,.3+.25*cos(op08v));op08c=mix(op08c,uColPaper,op08arc);op08c+=uColSignal*.28*smoothstep(.3,0.,abs(op08v));fragColor=vec4(op08c,1.);}

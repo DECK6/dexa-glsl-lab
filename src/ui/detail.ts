@@ -1,4 +1,5 @@
 import { SHADERS, byId, categoryLabel, type ShaderEntry } from '../registry'
+import { categoryById } from '../catalog'
 import { mountShader, type ShaderHandle } from '../runner'
 import { siteHeader } from './shell'
 
@@ -21,6 +22,7 @@ export function mountDetail(root: HTMLElement, id: string): { destroy: () => voi
 
   const entry: ShaderEntry = found
   const { meta } = entry
+  const category = categoryById(meta.category)!
   const position = SHADERS.findIndex((item) => item.meta.id === meta.id)
   const prev = SHADERS[(position - 1 + SHADERS.length) % SHADERS.length]!
   const next = SHADERS[(position + 1) % SHADERS.length]!
@@ -33,7 +35,7 @@ export function mountDetail(root: HTMLElement, id: string): { destroy: () => voi
     <main class="detail-page">
       <div class="detail-title-row">
         <div>
-          <p class="eyebrow mono">${meta.id} / ${categoryLabel(meta.category)} / GLSL</p>
+          <p class="eyebrow mono">${meta.id} / ${categoryLabel(meta.category)} / ${category.runtime.toUpperCase()} RUNTIME</p>
           <h1>${meta.title}<span>.</span></h1>
         </div>
         <a class="text-link mono" href="#/">← BACK TO GALLERY</a>
@@ -46,7 +48,7 @@ export function mountDetail(root: HTMLElement, id: string): { destroy: () => voi
           </div>
         </div>
         <aside class="param-panel">
-          <div class="panel-heading mono"><span>SHADER CONTROL</span><span>${meta.id}</span></div>
+          <div class="panel-heading mono"><span>SHADER CONTROL</span><span>${category.domain.toUpperCase()} / ${category.runtime.toUpperCase()}</span></div>
           <div class="param-list">
             <div class="param-control mono"><span>SEED</span><output data-role="seed"></output></div>
             <button type="button" class="action-button mono regen-button" data-role="regen">REGENERATE</button>
@@ -106,7 +108,8 @@ export function mountDetail(root: HTMLElement, id: string): { destroy: () => voi
     const title = document.createElement('strong')
     title.textContent = item.meta.title
     const detail = document.createElement('small')
-    detail.textContent = `${categoryLabel(item.meta.category)} / GLSL`
+    const itemCategory = categoryById(item.meta.category)!
+    detail.textContent = `${categoryLabel(item.meta.category)} / ${itemCategory.runtime.toUpperCase()}`
     card.append(number, title, detail)
     relatedGrid.appendChild(card)
   }

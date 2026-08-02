@@ -1,0 +1,3 @@
+float mc02Field(vec2 p,float t){float stepv=floor(t*2.)/2.;float a=stepv*.7;float gear=abs(length(p)-(.62+.06*sin(12.*atan(p.y,p.x)+a)));float anchor=min(length(p-vec2(-.35,.35)),length(p-vec2(.35,.35)))-.12;return min(gear,anchor);}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 mc02q=(fragCoord-.5*iResolution.xy)/iResolution.y*2.8;float mc02f=mc02Field(mc02q,iTime);float mc02line=smoothstep(.12,.015,abs(fract(mc02f*.75)-.5));float mc02halo=smoothstep(.45,.02,abs(mc02f));vec3 mc02c=mix(uColBg,uColDim,.22+.35*mc02halo);mc02c=mix(mc02c,uColPaper,mc02line);mc02c+=uColSignal*mc02halo*.35+uColAccent*mc02line*.18;fragColor=vec4(mc02c,1.);}

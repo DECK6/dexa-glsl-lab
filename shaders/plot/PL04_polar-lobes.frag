@@ -1,0 +1,3 @@
+float pl04Field(vec2 p,float t){float a=atan(p.y,p.x),r=length(p);float f=.72+.25*cos(4.*a+t*.3);float g=.48+.18*sin(7.*a-t*.2);return min(abs(r-f),abs(r-g));}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 pl04uv=fragCoord/iResolution.xy;vec2 pl04cell=floor(pl04uv*9.);vec2 pl04local=fract(pl04uv*9.)-.5;float pl04v=pl04Field((pl04cell-4.)*.31+pl04local*.18,iTime+dot(pl04cell,vec2(.07,.11)));float pl04glyph=smoothstep(.42,.08,abs(pl04v));float pl04frame=smoothstep(.48,.44,max(abs(pl04local.x),abs(pl04local.y)));vec3 pl04c=mix(uColBg,uColInk,pl04frame);pl04c=mix(pl04c,uColSignal,pl04glyph*pl04frame);pl04c+=uColAccent*.2*(1.-pl04frame);fragColor=vec4(pl04c,1.);}

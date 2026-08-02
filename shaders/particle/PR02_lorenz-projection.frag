@@ -1,0 +1,3 @@
+float pr02Field(vec2 p,float t){vec3 q=vec3(.1,.0,.0);float d=8.;for(int k=0;k<120;k++){vec3 v=vec3(10.*(q.y-q.x),q.x*(28.-q.z)-q.y,q.x*q.y-2.666*q.z);q+=v*.006;vec2 s=q.xy*.045+vec2(.1*sin(t*.1),0.);d=min(d,length(p-s));}return d;}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 pr02q=(fragCoord-.5*iResolution.xy)/iResolution.y*2.8;float pr02f=pr02Field(pr02q,iTime);float pr02line=smoothstep(.12,.015,abs(fract(pr02f*.75)-.5));float pr02halo=smoothstep(.45,.02,abs(pr02f));vec3 pr02c=mix(uColBg,uColDim,.22+.35*pr02halo);pr02c=mix(pr02c,uColPaper,pr02line);pr02c+=uColSignal*pr02halo*.35+uColAccent*pr02line*.18;fragColor=vec4(pr02c,1.);}

@@ -1,7 +1,28 @@
-# PROGRESS — 200종 집필 원장
+# PROGRESS — 500종 집필·검증 원장
 
-게이트: `bun run lint:registry && bun run audit:shaders && bun run build`.
-전체 완료 후 썸네일 200장, 카테고리 접촉 시트, E2E 전수를 최종 감사한다.
+구조: **Core 350 + Buffer 100 + Input 50 = 500**. 50개 카테고리마다 정확히 10종이다.
+게이트: `bun run lint:registry && bun run audit:shaders && bun run build && bun run thumbs && bun run audit:contacts && bun run test:e2e`.
+
+## 500 카탈로그 원장
+
+| runtime | 카테고리 | 수량 | 상태 |
+|---|---|---:|---|
+| Core | 기존 20 + complex/curve/plot/optics/material/terrain/atmosphere/volume/architecture/organic/typography/cartography/particle/mechanism/topology | 350 | 35 × 10 완료 |
+| Buffer | automata/reaction/fluid/wave-sim/growth/swarm/erosion/feedback/progressive/digital-paint | 100 | 10 × 10 완료 |
+| Input | convolution/vision/compositing/environment/audio | 50 | 5 × 10 완료 |
+| **합계** | **50 카테고리** | **500** | **500 meta / 500 frag** |
+
+### 신규 300 상세 원장
+
+| 범위 | 카테고리 | 상태 | 차별 축 |
+|---|---|---|---|
+| CX–MT | complex, curve, plot, optics, material | 50/50 | 복소 사상·곡선 구성·함수 도식·파동 광학·표면 반응 |
+| TE–OR | terrain, atmosphere, volume, architecture, organic | 50/50 | 지형·대기층·밀도장·공간 구조·생체 형태 |
+| TY–TP | typography, cartography, particle, mechanism, topology | 50/50 | 활자 구조·지도 투영·입자 궤적·기구학·위상 불변량 |
+| AU–DP | 10개 Buffer 카테고리 | 100/100 | 자동자·반응확산·유체·파동·성장·군집·침식·피드백·누적·안료 |
+| KC–AD | 5개 Input 카테고리 | 50/50 | 커널·비전·합성·환경 투영·오디오 분석 |
+
+## 기존 Core 200 보존 원장
 
 | 카테고리 | 프리픽스 | 상태 | 비고 |
 |---|---|---|---|
@@ -26,9 +47,9 @@
 | cellular | CA | 10/10 | Voronoi·bubble·crystal·mosaic·vein 계열 분리 |
 | minimal | MN | 10/10 | 선·점·궤도·모서리·메트로놈 등 절제 구도 분리 |
 
-합계: **200/200** — 20개 카테고리 × 각 10종.
+기존 범위 합계: **200/200** — 20개 카테고리 × 각 10종. 전체 합계는 **500/500**.
 
-## 2026-08-02 최종 감사 증거
+## 2026-08-02 기존 200 기준선 감사 증거
 
 - `bun run lint:registry` — `OK (200 meta / 200 frag)`.
 - `bun run audit:shaders` — 200종 GLSL 실컴파일·256×256 렌더, 20개 카테고리 각 10종, blank/frozen/근접복제 hard gate 통과.
@@ -39,6 +60,18 @@
 - `bun run test:e2e -- --reporter=dot` — 셸·라이브 편집·200종 alive 전수, **203 passed (3.7m)**.
 
 세부 감사 기준·근접쌍 판정·교정 내역은 `docs/QUALITY_AUDIT.md`에 기록한다.
+
+## 2026-08-02 500 확장 최종 감사 증거
+
+- `bun run lint:registry` — `OK (500 meta / 500 frag)`; 50개 category 모두 10/10.
+- `bun run test:unit` — catalog/runtime contract **8 passed**, 27 assertions.
+- `bun run audit:core` — Core 350종 직접 WebGL 컴파일·비공백·모션·중복 hard gate 통과.
+- `bun run audit:shaders` — production runner에서 **500종** 실행, runtime `core:350 buffer:100 input:50`, 50개 category 각 10종, 실패 0.
+- `bun run typecheck && bun run build` — TypeScript 종료 코드 0, Vite **1017 modules transformed**, production build 성공.
+- `bun run thumbs` — `OK (500 stills → public/thumbs)`; JPG 500개, 0-byte 0개.
+- `bun run audit:contacts` — `OK (50 sheets)`; 5개 오버뷰와 교정 대상 contact sheet를 직접 눈검사.
+- `bun run test:e2e -- --reporter=dot` — 제품 셸·필터·라이브 편집·500종 alive 전수, **503 passed (8.5m)**.
+- 기존 미추적 `.check-pattern.mjs`, `.thumb-pattern.mjs`는 조사·수정·삭제·커밋 대상에서 제외했다.
 
 ## 전달 경계
 

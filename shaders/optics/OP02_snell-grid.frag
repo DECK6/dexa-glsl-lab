@@ -1,0 +1,3 @@
+float op02Field(vec2 p,float t){float radius=.82+.08*sin(t*.3);float r=length(p);vec2 q=p;if(r<radius){float n=1.28+.15*sin(t*.2);float z=sqrt(max(.01,radius*radius-r*r));q=p*(1.-.28*(1.-z/radius)/n);}return min(abs(fract(q.x*4.)-.5),abs(fract(q.y*4.)-.5));}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 op02q=(fragCoord-.5*iResolution.xy)/iResolution.y*2.8;float op02f=op02Field(op02q,iTime);float op02line=smoothstep(.12,.015,abs(fract(op02f*.75)-.5));float op02halo=smoothstep(.45,.02,abs(op02f));vec3 op02c=mix(uColBg,uColDim,.22+.35*op02halo);op02c=mix(op02c,uColPaper,op02line);op02c+=uColSignal*op02halo*.35+uColAccent*op02line*.18;fragColor=vec4(op02c,1.);}

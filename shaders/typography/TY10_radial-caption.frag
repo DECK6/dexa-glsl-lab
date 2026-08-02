@@ -1,0 +1,3 @@
+float ty10Field(vec2 p,float t){float a=atan(p.y,p.x)+t*.1,r=length(p);float glyph=abs(fract(a/6.28318*18.)-.5);float ring=abs(r-.75);float ticks=max(glyph-.16,abs(r-.75)-.18);return min(ring,ticks);}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 ty10p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.5;float ty10layers=0.;for(int ty10k=0;ty10k<6;ty10k++){float ty10s=float(ty10k);vec2 ty10q=ty10p*(1.+ty10s*.13)+.08*vec2(sin(ty10s+iTime),cos(ty10s*.7-iTime));ty10layers+=sin(ty10Field(ty10q,iTime)*3.+ty10s);}float ty10v=.5+.5*sin(ty10layers);vec3 ty10c=mix(uColBg,uColPaper,ty10v*.55);ty10c=mix(ty10c,uColSignal,smoothstep(.65,.96,ty10v));ty10c=mix(ty10c,uColAccent,smoothstep(.92,1.,1.-ty10v));fragColor=vec4(ty10c,1.);}

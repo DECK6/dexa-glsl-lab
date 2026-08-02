@@ -1,0 +1,3 @@
+float ty04Field(vec2 p,float t){float col=floor((p.x+1.5)*4.);float x=fract((p.x+1.5)*4.)-.5;float height=.3+.55*(.5+.5*sin(t+col*.8));float stem=max(abs(x)-.1,abs(p.y+.75-height*.5)-height*.5);return stem;}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 ty04uv=fragCoord/iResolution.xy;vec2 ty04cell=floor(ty04uv*9.);vec2 ty04local=fract(ty04uv*9.)-.5;float ty04v=ty04Field((ty04cell-4.)*.31+ty04local*.18,iTime+dot(ty04cell,vec2(.07,.11)));float ty04glyph=smoothstep(.42,.08,abs(ty04v));float ty04frame=smoothstep(.48,.44,max(abs(ty04local.x),abs(ty04local.y)));vec3 ty04c=mix(uColBg,uColInk,ty04frame);ty04c=mix(ty04c,uColSignal,ty04glyph*ty04frame);ty04c+=uColAccent*.2*(1.-ty04frame);fragColor=vec4(ty04c,1.);}

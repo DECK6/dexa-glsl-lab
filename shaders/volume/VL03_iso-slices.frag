@@ -1,0 +1,3 @@
+float vl03Field(vec2 p,float t){float acc=0.;for(int k=0;k<18;k++){float z=float(k)/17.*2.-1.;float f=sin(p.x*3.+z*2.)+cos(p.y*4.-z*3.+t*.2)+sin(z*5.);acc+=exp(-12.*abs(f-.35));}return acc*.12;}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 vl03p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.2;float vl03a=vl03Field(vl03p,iTime);float vl03b=vl03Field(mat2(.8,-.6,.6,.8)*vl03p*1.17,-iTime*.73);float vl03cross=smoothstep(.18,.01,abs(vl03a-vl03b));vec3 vl03col=mix(uColInk,uColPaper,.5+.5*sin(vl03a*5.));vl03col=mix(vl03col,uColSignal,vl03cross);vl03col=mix(uColBg,vl03col,smoothstep(.02,.75,abs(vl03a)+abs(vl03b)));fragColor=vec4(vl03col,1.);}

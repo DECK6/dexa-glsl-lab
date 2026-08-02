@@ -1,0 +1,3 @@
+float vl08Field(vec2 p,float t){float sum=0.;for(int k=0;k<22;k++){float z=float(k)/21.*2.-1.;float y=p.y+1.;float width=.12+.22*max(y,0.);float center=.18*sin(y*3.+z*2.+t*.35);float d=exp(-pow((p.x-center)/max(width,.04),2.)-z*z*1.8)*smoothstep(2.,0.,y);sum+=d;}return sum*.08;}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.4;float density=vl08Field(p,iTime);float plume=smoothstep(.04,.72,density);float slices=pow(.5+.5*cos(p.y*18.-density*8.-iTime*1.35),10.);float core=smoothstep(.16,.72,density*(1.2+.3*sin(iTime*.7)));vec3 col=mix(uColBg,uColDim,.16+.3*plume);col=mix(col,uColPaper,core*.68);col+=uColSignal*plume*(.16+.42*slices)+uColAccent*slices*plume*.12;fragColor=vec4(col,1.);}

@@ -1,0 +1,3 @@
+float at03Field(vec2 p,float t){p.x+=.45*sin(p.y*1.8+t*.18);float fibers=sin(p.x*17.+sin(p.y*6.))+sin(p.x*31.-p.y*2.);return fibers*.28+.45*sin(p.y*2.-t*.12);}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 at03p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.2;float at03a=at03Field(at03p,iTime);float at03b=at03Field(mat2(.8,-.6,.6,.8)*at03p*1.17,-iTime*.73);float at03cross=smoothstep(.18,.01,abs(at03a-at03b));vec3 at03col=mix(uColInk,uColPaper,.5+.5*sin(at03a*5.));at03col=mix(at03col,uColSignal,at03cross);at03col=mix(uColBg,at03col,smoothstep(.02,.75,abs(at03a)+abs(at03b)));fragColor=vec4(at03col,1.);}

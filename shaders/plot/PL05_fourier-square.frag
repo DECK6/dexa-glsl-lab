@@ -1,0 +1,3 @@
+float pl05Field(vec2 p,float t){float y=0.;for(int k=0;k<7;k++){float n=float(k*2+1);y+=sin(n*(p.x*2.2+t*.25))/n;}y*=.42;return abs(p.y-y);}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 pl05p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.7;float pl05sum=0.;for(int pl05i=0;pl05i<18;pl05i++){float pl05s=float(pl05i)/17.;vec2 pl05d=.36*pl05s*vec2(cos(pl05s*9.+iTime*.2),sin(pl05s*7.));pl05sum+=exp(-4.*abs(pl05Field(pl05p+pl05d,iTime-pl05s)));}float pl05ink=1.-exp(-pl05sum*.16);vec3 pl05c=mix(uColBg,uColDim,.35);pl05c=mix(pl05c,uColSignal,pl05ink);pl05c+=uColPaper*.18*pl05ink+uColAccent*.12*sin(pl05sum);fragColor=vec4(pl05c,1.);}

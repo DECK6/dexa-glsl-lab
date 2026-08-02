@@ -1,0 +1,3 @@
+float at07Field(vec2 p,float t){vec2 s=vec2(.18*sin(t*.17),.15);float r=length(p-s);float ring=abs(r-.72);float dogs=min(length(p-s-vec2(.72,0)),length(p-s+vec2(.72,0)));return min(ring,dogs*.45);}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 at07p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.6;float at07warp=at07Field(at07p*.7,iTime);at07p+=.22*vec2(cos(at07warp*3.+iTime),sin(at07warp*2.-iTime));float at07v=at07Field(at07p,iTime);float at07ridge=exp(-3.5*abs(sin(at07v*4.)));vec3 at07c=mix(uColBg,uColInk,.55+.35*sin(at07v));at07c=mix(at07c,uColSignal,at07ridge);at07c+=uColAccent*.18*smoothstep(.8,1.,at07ridge);fragColor=vec4(at07c,1.);}

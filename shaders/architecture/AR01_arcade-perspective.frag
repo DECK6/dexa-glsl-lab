@@ -1,0 +1,3 @@
+float ar01Field(vec2 p,float t){float depth=fract(2./max(.2,p.y+2.)+t*.05);float x=abs(fract(p.x*(2.+depth*3.))-.5);float arch=abs(length(vec2(x,max(0.,p.y-.1)))-(.28+.12*depth));return min(arch,abs(depth-.5)*.3);}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 ar01p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.4;float ar01v=ar01Field(ar01p,iTime);float ar01band=.5+.5*cos(10.*ar01v);vec3 ar01col=mix(uColBg,uColInk,.25+.55*smoothstep(.15,.9,ar01band));ar01col=mix(ar01col,uColSignal,smoothstep(.82,.98,ar01band));ar01col+=uColAccent*.16*smoothstep(.08,0.,abs(fract(ar01v*1.7)-.5));fragColor=vec4(ar01col,1.);}

@@ -1,0 +1,3 @@
+float pl10Field(vec2 p,float t){float d=8.;for(int k=0;k<90;k++){float s=float(k)/16.+t*.12;vec2 q=exp(-.13*s)*vec2(cos(2.3*s),-2.3*sin(2.3*s))*.9;d=min(d,length(p-q));}return d;}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 pl10p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.5;float pl10layers=0.;for(int pl10k=0;pl10k<6;pl10k++){float pl10s=float(pl10k);vec2 pl10q=pl10p*(1.+pl10s*.13)+.08*vec2(sin(pl10s+iTime),cos(pl10s*.7-iTime));pl10layers+=sin(pl10Field(pl10q,iTime)*3.+pl10s);}float pl10v=.5+.5*sin(pl10layers);vec3 pl10c=mix(uColBg,uColPaper,pl10v*.55);pl10c=mix(pl10c,uColSignal,smoothstep(.65,.96,pl10v));pl10c=mix(pl10c,uColAccent,smoothstep(.92,1.,1.-pl10v));fragColor=vec4(pl10c,1.);}

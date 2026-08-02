@@ -1,0 +1,3 @@
+float cx10Field(vec2 p,float t){vec2 sum=vec2(0.);for(int k=1;k<=7;k++){float n=float(k);float phase=n*p.x+t*(.16+.035*n);float amp=exp(-.34*n*abs(p.y))/n;sum+=amp*vec2(cos(phase),sin(phase));}return atan(sum.y,sum.x)+length(sum);}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 cx10p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.5;float cx10layers=0.;for(int cx10k=0;cx10k<6;cx10k++){float cx10s=float(cx10k);vec2 cx10q=cx10p*(1.+cx10s*.13)+.08*vec2(sin(cx10s+iTime),cos(cx10s*.7-iTime));cx10layers+=sin(cx10Field(cx10q,iTime)*3.+cx10s);}float cx10v=.5+.5*sin(cx10layers);vec3 cx10c=mix(uColBg,uColPaper,cx10v*.55);cx10c=mix(cx10c,uColSignal,smoothstep(.65,.96,cx10v));cx10c=mix(cx10c,uColAccent,smoothstep(.92,1.,1.-cx10v));fragColor=vec4(cx10c,1.);}

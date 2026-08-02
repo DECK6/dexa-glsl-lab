@@ -1,0 +1,3 @@
+float ar09Field(vec2 p,float t){float row=floor((p.y+1.5)*3.);float scale=mix(2.4,4.2,fract(row*.618));float x=fract((p.x+t*.025*sign(row+1.))*scale)-.5;float y=fract((p.y+1.5)*3.)-.5;return max(abs(x)-.31,abs(y)-.25);}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 ar09p=(fragCoord-.5*iResolution.xy)/iResolution.y*3.;vec2 ar09tile=floor(ar09p);vec2 ar09f=fract(ar09p)-.5;float ar09v=ar09Field(ar09f+ar09tile*.17,iTime+dot(ar09tile,vec2(.13,.19)));float ar09mark=smoothstep(.16,.01,abs(ar09v));float ar09edge=smoothstep(.49,.45,max(abs(ar09f.x),abs(ar09f.y)));vec3 ar09c=mix(uColBg,uColInk,ar09edge);ar09c=mix(ar09c,uColAccent,ar09mark);ar09c+=uColSignal*.22*(1.-ar09edge);fragColor=vec4(ar09c,1.);}

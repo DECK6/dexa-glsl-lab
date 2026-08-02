@@ -1,0 +1,3 @@
+float pl06Field(vec2 p,float t){float rate=mix(2.75,4.,clamp((p.x+1.5)/3.,0.,1.));float x=.51+.02*sin(t*.2);float d=5.;for(int k=0;k<42;k++){x=rate*x*(1.-x);if(k>20)d=min(d,abs(p.y-(x-.5)*2.));}return d;}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 pl06p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.3;float pl06e=.008;float pl06v=pl06Field(pl06p,iTime);vec2 pl06g=vec2(pl06Field(pl06p+vec2(pl06e,0.),iTime)-pl06v,pl06Field(pl06p+vec2(0.,pl06e),iTime)-pl06v)/pl06e;vec3 pl06normal=normalize(vec3(-pl06g,1.));float pl06lit=.5+.5*dot(pl06normal,normalize(vec3(.7,.5,1.)));vec3 pl06c=mix(uColInk,uColPaper,pl06lit);pl06c=mix(pl06c,uColSignal,smoothstep(.12,.01,abs(pl06v)));pl06c=mix(uColBg,pl06c,smoothstep(.02,.35,length(pl06g)));fragColor=vec4(pl06c,1.);}

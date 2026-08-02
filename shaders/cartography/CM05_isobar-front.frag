@@ -1,0 +1,3 @@
+float cm05Field(vec2 p,float t){vec2 c=.25*vec2(sin(t*.2),cos(t*.17));float pressure=length(p-c)+.12*sin(3.*atan(p.y-c.y,p.x-c.x));return abs(fract(pressure*5.)-.5);}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 cm05p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.7;float cm05sum=0.;for(int cm05i=0;cm05i<18;cm05i++){float cm05s=float(cm05i)/17.;vec2 cm05d=.36*cm05s*vec2(cos(cm05s*9.+iTime*.2),sin(cm05s*7.));cm05sum+=exp(-4.*abs(cm05Field(cm05p+cm05d,iTime-cm05s)));}float cm05ink=1.-exp(-cm05sum*.16);vec3 cm05c=mix(uColBg,uColDim,.35);cm05c=mix(cm05c,uColSignal,cm05ink);cm05c+=uColPaper*.18*cm05ink+uColAccent*.12*sin(cm05sum);fragColor=vec4(cm05c,1.);}

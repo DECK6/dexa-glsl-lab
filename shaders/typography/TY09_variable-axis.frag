@@ -1,0 +1,3 @@
+float ty09Field(vec2 p,float t){float slant=.35*sin(t*.27);p.x-=p.y*slant;float weight=.08+.08*(.5+.5*sin(t*.41));float stems=min(abs(p.x-.42),abs(p.x+.42))-weight;float bar=abs(p.y)-weight*.7;return min(stems,bar);}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 ty09p=(fragCoord-.5*iResolution.xy)/iResolution.y*3.;vec2 ty09tile=floor(ty09p);vec2 ty09f=fract(ty09p)-.5;float ty09v=ty09Field(ty09f+ty09tile*.17,iTime+dot(ty09tile,vec2(.13,.19)));float ty09mark=smoothstep(.16,.01,abs(ty09v));float ty09edge=smoothstep(.49,.45,max(abs(ty09f.x),abs(ty09f.y)));vec3 ty09c=mix(uColBg,uColInk,ty09edge);ty09c=mix(ty09c,uColAccent,ty09mark);ty09c+=uColSignal*.22*(1.-ty09edge);fragColor=vec4(ty09c,1.);}

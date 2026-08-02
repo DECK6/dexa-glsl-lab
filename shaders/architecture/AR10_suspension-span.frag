@@ -1,0 +1,3 @@
+float ar10Field(vec2 p,float t){float deck=abs(p.y+.48+.025*sin(p.x*4.+t));float cable=abs(p.y-(.48*p.x*p.x+.25));float hang=abs(fract((p.x+1.5)*6.)-.5)*.18+step(.48*p.x*p.x+.25,p.y);return min(deck,min(cable,hang));}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 ar10p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.5;float ar10layers=0.;for(int ar10k=0;ar10k<6;ar10k++){float ar10s=float(ar10k);vec2 ar10q=ar10p*(1.+ar10s*.13)+.08*vec2(sin(ar10s+iTime),cos(ar10s*.7-iTime));ar10layers+=sin(ar10Field(ar10q,iTime)*3.+ar10s);}float ar10v=.5+.5*sin(ar10layers);vec3 ar10c=mix(uColBg,uColPaper,ar10v*.55);ar10c=mix(ar10c,uColSignal,smoothstep(.65,.96,ar10v));ar10c=mix(ar10c,uColAccent,smoothstep(.92,1.,1.-ar10v));fragColor=vec4(ar10c,1.);}

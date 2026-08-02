@@ -4,6 +4,7 @@ const PORT = 4174
 
 export default defineConfig({
   testDir: './tests',
+  testIgnore: ['**/*.test.ts'],
   timeout: 45_000,
   fullyParallel: true,
   workers: 3,

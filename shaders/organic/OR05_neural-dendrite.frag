@@ -1,0 +1,3 @@
+float or05Field(vec2 p,float t){float a=atan(p.y,p.x),r=length(p);float branches=abs(sin(7.*a+2.*sin(r*6.)))*.12+abs(fract(r*3.-t*.2)-.5)*.08;return min(abs(r-.18),branches);}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 or05p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.7;float or05sum=0.;for(int or05i=0;or05i<18;or05i++){float or05s=float(or05i)/17.;vec2 or05d=.36*or05s*vec2(cos(or05s*9.+iTime*.2),sin(or05s*7.));or05sum+=exp(-4.*abs(or05Field(or05p+or05d,iTime-or05s)));}float or05ink=1.-exp(-or05sum*.16);vec3 or05c=mix(uColBg,uColDim,.35);or05c=mix(or05c,uColSignal,or05ink);or05c+=uColPaper*.18*or05ink+uColAccent*.12*sin(or05sum);fragColor=vec4(or05c,1.);}

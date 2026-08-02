@@ -1,0 +1,3 @@
+vec2 cx02Div(vec2 a,vec2 b){return vec2(a.x*b.x+a.y*b.y,a.y*b.x-a.x*b.y)/max(dot(b,b),.001);} float cx02Field(vec2 p,float t){vec2 a=vec2(.55*cos(t*.4),.35*sin(t*.3));vec2 w=cx02Div(p-a,p+a+vec2(.18,-.12));return sin(w.x*8.)+cos(w.y*8.)+length(w)*.25;}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 cx02q=(fragCoord-.5*iResolution.xy)/iResolution.y*2.8;float cx02f=cx02Field(cx02q,iTime);float cx02line=smoothstep(.12,.015,abs(fract(cx02f*.75)-.5));float cx02halo=smoothstep(.45,.02,abs(cx02f));vec3 cx02c=mix(uColBg,uColDim,.22+.35*cx02halo);cx02c=mix(cx02c,uColPaper,cx02line);cx02c+=uColSignal*cx02halo*.35+uColAccent*cx02line*.18;fragColor=vec4(cx02c,1.);}

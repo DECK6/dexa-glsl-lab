@@ -1,0 +1,3 @@
+float te05Field(vec2 p,float t){float r=length(p);float cone=1.-r;float bowl=.7*exp(-18.*r*r);float gullies=.12*sin(11.*atan(p.y,p.x)+t*.25)*exp(-r);return cone-bowl+gullies;}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 te05p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.7;float te05sum=0.;for(int te05i=0;te05i<18;te05i++){float te05s=float(te05i)/17.;vec2 te05d=.36*te05s*vec2(cos(te05s*9.+iTime*.2),sin(te05s*7.));te05sum+=exp(-4.*abs(te05Field(te05p+te05d,iTime-te05s)));}float te05ink=1.-exp(-te05sum*.16);vec3 te05c=mix(uColBg,uColDim,.35);te05c=mix(te05c,uColSignal,te05ink);te05c+=uColPaper*.18*te05ink+uColAccent*.12*sin(te05sum);fragColor=vec4(te05c,1.);}

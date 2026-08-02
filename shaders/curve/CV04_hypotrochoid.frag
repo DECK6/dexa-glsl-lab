@@ -1,0 +1,3 @@
+float cv04Field(vec2 p,float t){float d=8.;float R=1.05,r=.37,q=.62+.05*sin(t*.3);for(int k=0;k<96;k++){float a=6.28318*float(k)/96.+t*.06;vec2 x=vec2((R-r)*cos(a)+q*cos((R-r)/r*a),(R-r)*sin(a)-q*sin((R-r)/r*a));d=min(d,length(p-x));}return d;}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 cv04uv=fragCoord/iResolution.xy;vec2 cv04cell=floor(cv04uv*9.);vec2 cv04local=fract(cv04uv*9.)-.5;float cv04v=cv04Field((cv04cell-4.)*.31+cv04local*.18,iTime+dot(cv04cell,vec2(.07,.11)));float cv04glyph=smoothstep(.42,.08,abs(cv04v));float cv04frame=smoothstep(.48,.44,max(abs(cv04local.x),abs(cv04local.y)));vec3 cv04c=mix(uColBg,uColInk,cv04frame);cv04c=mix(cv04c,uColSignal,cv04glyph*cv04frame);cv04c+=uColAccent*.2*(1.-cv04frame);fragColor=vec4(cv04c,1.);}

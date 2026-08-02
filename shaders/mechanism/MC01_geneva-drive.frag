@@ -1,0 +1,3 @@
+float mc01Field(vec2 p,float t){float a=t*.7;vec2 pin=.55*vec2(cos(a),sin(a));float wheel=abs(length(p-vec2(.45,0))-.48);float slots=abs(sin(4.*atan(p.y,p.x-.45)))*.18+abs(length(p-vec2(.45,0))-.22);return min(wheel,min(slots,length(p-pin)-.06));}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 mc01p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.4;float mc01v=mc01Field(mc01p,iTime);float mc01band=.5+.5*cos(10.*mc01v);vec3 mc01col=mix(uColBg,uColInk,.25+.55*smoothstep(.15,.9,mc01band));mc01col=mix(mc01col,uColSignal,smoothstep(.82,.98,mc01band));mc01col+=uColAccent*.16*smoothstep(.08,0.,abs(fract(mc01v*1.7)-.5));fragColor=vec4(mc01col,1.);}

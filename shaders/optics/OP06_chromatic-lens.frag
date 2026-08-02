@@ -1,0 +1,3 @@
+float op06Field(vec2 p,float t){float r=length(p);float bend=.18*r*r*(1.+.2*sin(t*.35));float a=sin((p.x+bend)*9.)+cos((p.y-bend)*8.);float b=sin((p.x-bend*.6)*11.)+cos((p.y+bend)*7.);return a-b*.63;}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 op06p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.3;float op06e=.008;float op06v=op06Field(op06p,iTime);vec2 op06g=vec2(op06Field(op06p+vec2(op06e,0.),iTime)-op06v,op06Field(op06p+vec2(0.,op06e),iTime)-op06v)/op06e;vec3 op06normal=normalize(vec3(-op06g,1.));float op06lit=.5+.5*dot(op06normal,normalize(vec3(.7,.5,1.)));vec3 op06c=mix(uColInk,uColPaper,op06lit);op06c=mix(op06c,uColSignal,smoothstep(.12,.01,abs(op06v)));op06c=mix(uColBg,op06c,smoothstep(.02,.35,length(op06g)));fragColor=vec4(op06c,1.);}

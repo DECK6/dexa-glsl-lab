@@ -1,0 +1,3 @@
+float cx07Field(vec2 p,float t){float radius=max(length(p),.004);float angle=atan(p.y,p.x);vec2 w=vec2(log(radius),angle);return sin(5.*w.x-3.*w.y+t*.7)+.35*cos(7.*w.y+t*.2);}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 cx07p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.6;float cx07warp=cx07Field(cx07p*.7,iTime);cx07p+=.22*vec2(cos(cx07warp*3.+iTime),sin(cx07warp*2.-iTime));float cx07v=cx07Field(cx07p,iTime);float cx07ridge=exp(-3.5*abs(sin(cx07v*4.)));vec3 cx07c=mix(uColBg,uColInk,.55+.35*sin(cx07v));cx07c=mix(cx07c,uColSignal,cx07ridge);cx07c+=uColAccent*.18*smoothstep(.8,1.,cx07ridge);fragColor=vec4(cx07c,1.);}

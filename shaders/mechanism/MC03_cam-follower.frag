@@ -1,0 +1,3 @@
+float mc03Field(vec2 p,float t){float a=t*.6;vec2 q=mat2(cos(a),-sin(a),sin(a),cos(a))*p;float cam=length(q*vec2(.8,1.))- .5-.12*q.x;float lift=.5+.18*sin(a)+.08*sin(2.*a);float follower=max(abs(p.x)-.1,abs(p.y-lift)-.42);return min(abs(cam),abs(follower));}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 mc03p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.2;float mc03a=mc03Field(mc03p,iTime);float mc03b=mc03Field(mat2(.8,-.6,.6,.8)*mc03p*1.17,-iTime*.73);float mc03cross=smoothstep(.18,.01,abs(mc03a-mc03b));vec3 mc03col=mix(uColInk,uColPaper,.5+.5*sin(mc03a*5.));mc03col=mix(mc03col,uColSignal,mc03cross);mc03col=mix(uColBg,mc03col,smoothstep(.02,.75,abs(mc03a)+abs(mc03b)));fragColor=vec4(mc03col,1.);}

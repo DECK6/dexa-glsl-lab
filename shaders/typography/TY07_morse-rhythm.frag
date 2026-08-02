@@ -1,0 +1,3 @@
+float ty07Field(vec2 p,float t){float row=floor((p.y+1.5)*5.);float x=fract(p.x*3.-t*.25+row*.17)-.5;float dash=step(.5,fract(sin(row*9.1)*31.));return max(abs(x)-mix(.12,.36,dash),abs(fract((p.y+1.5)*5.)-.5)-.08);}
+
+void mainImage(out vec4 fragColor,in vec2 fragCoord){vec2 ty07p=(fragCoord-.5*iResolution.xy)/iResolution.y*2.6;float ty07warp=ty07Field(ty07p*.7,iTime);ty07p+=.22*vec2(cos(ty07warp*3.+iTime),sin(ty07warp*2.-iTime));float ty07v=ty07Field(ty07p,iTime);float ty07ridge=exp(-3.5*abs(sin(ty07v*4.)));vec3 ty07c=mix(uColBg,uColInk,.55+.35*sin(ty07v));ty07c=mix(ty07c,uColSignal,ty07ridge);ty07c+=uColAccent*.18*smoothstep(.8,1.,ty07ridge);fragColor=vec4(ty07c,1.);}

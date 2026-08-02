@@ -10,12 +10,14 @@ import { chromium } from '@playwright/test'
 import { readFileSync, readdirSync, statSync } from 'node:fs'
 import { dirname, join, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { categoryById } from '../src/catalog.ts'
 
 const ROOT = dirname(dirname(fileURLToPath(import.meta.url)))
 const SHADERS = join(ROOT, 'shaders')
 const SIZE = 256
 const BLANK_MAD = 0.8
 const MOTION_MAE = 0.05
+const coreOnly = process.argv.includes('--core-only')
 
 const HEADER = `#version 300 es
 precision highp float;
@@ -48,6 +50,7 @@ function collectSources() {
   for (const category of readdirSync(SHADERS).sort()) {
     const directory = join(SHADERS, category)
     if (!statSync(directory).isDirectory()) continue
+    if (coreOnly && categoryById(category)?.runtime !== 'core') continue
     for (const file of readdirSync(directory).sort()) {
       if (!file.endsWith('.frag')) continue
       const path = join(directory, file)

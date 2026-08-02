@@ -1,4 +1,6 @@
 import { CATEGORIES, SHADERS, type ShaderEntry } from '../registry'
+import { DOMAINS, categoryById } from '../catalog'
+import type { DomainId, RuntimeTier } from '../catalog'
 import { mountShader, type ShaderHandle } from '../runner'
 import type { CategoryId } from '../types'
 import { siteHeader } from './shell'
@@ -17,6 +19,8 @@ interface LiveCard {
 
 export function mountGallery(root: HTMLElement): { destroy: () => void } {
   let category: CategoryId | null = null
+  let domain: DomainId | null = null
+  let runtime: RuntimeTier | null = null
   let query = ''
 
   root.innerHTML = `
@@ -28,8 +32,16 @@ export function mountGallery(root: HTMLElement): { destroy: () => void } {
           <button type="button" data-role="reset">RESET</button>
         </div>
         <fieldset>
+          <legend>DOMAIN</legend>
+          <div class="filter-options" data-role="domains"></div>
+        </fieldset>
+        <fieldset>
+          <legend>RUNTIME</legend>
+          <div class="filter-options" data-role="runtimes"></div>
+        </fieldset>
+        <fieldset>
           <legend>CATEGORY</legend>
-          <div class="filter-options filter-columns" data-role="categories"></div>
+          <div class="filter-groups" data-role="categories"></div>
         </fieldset>
       </aside>
       <section class="gallery-content" aria-labelledby="gallery-title">
@@ -56,6 +68,8 @@ export function mountGallery(root: HTMLElement): { destroy: () => void } {
   `
 
   const categoryRow = root.querySelector<HTMLElement>('[data-role="categories"]')!
+  const domainRow = root.querySelector<HTMLElement>('[data-role="domains"]')!
+  const runtimeRow = root.querySelector<HTMLElement>('[data-role="runtimes"]')!
   const grid = root.querySelector<HTMLElement>('[data-role="grid"]')!
   const countEl = root.querySelector<HTMLElement>('[data-role="count"]')!
   const emptyEl = root.querySelector<HTMLElement>('[data-role="empty"]')!
@@ -120,6 +134,7 @@ export function mountGallery(root: HTMLElement): { destroy: () => void } {
 
   const cards = SHADERS.map((entry) => {
     const { id, title } = entry.meta
+    const info = categoryById(entry.meta.category)!
     const card = document.createElement('a')
     card.className = 'effect-card'
     card.href = `#/s/${id}`
@@ -130,7 +145,7 @@ export function mountGallery(root: HTMLElement): { destroy: () => void } {
           <div class="card-live"></div>
         </div>
       </div>
-      <p class="effect-label mono">${id} / ${title} / GLSL</p>
+      <p class="effect-label mono"><span>${id} / ${title}</span><b class="runtime-badge" data-runtime="${info.runtime}">${info.runtime}</b></p>
     `
     const stage = card.querySelector<HTMLElement>('.live-preview')!
     const slot = card.querySelector<HTMLElement>('.card-live')!
@@ -160,19 +175,43 @@ export function mountGallery(root: HTMLElement): { destroy: () => void } {
   }
 
   function renderChoices() {
-    categoryRow.replaceChildren(
-      ...CATEGORIES.map((item) =>
+    domainRow.replaceChildren(...DOMAINS.map((item) =>
+      choice(item.label, domain === item.id, () => {
+        domain = domain === item.id ? null : item.id
+        render()
+      }),
+    ))
+    runtimeRow.replaceChildren(...(['core', 'buffer', 'input'] as const).map((item) =>
+      choice(item.toUpperCase(), runtime === item, () => {
+        runtime = runtime === item ? null : item
+        render()
+      }),
+    ))
+    categoryRow.replaceChildren(...DOMAINS.map((domainItem) => {
+      const group = document.createElement('section')
+      group.className = 'filter-group'
+      const heading = document.createElement('p')
+      heading.textContent = domainItem.label
+      const options = document.createElement('div')
+      options.className = 'filter-options'
+      options.replaceChildren(...CATEGORIES.filter((item) => item.domain === domainItem.id).map((item) =>
         choice(item.label, category === item.id, () => {
           category = category === item.id ? null : item.id
+          domain = null
           render()
         }),
-      ),
-    )
+      ))
+      group.append(heading, options)
+      return group
+    }))
   }
 
   function matches(entry: ShaderEntry) {
     const { meta } = entry
+    const info = categoryById(meta.category)!
     if (category && meta.category !== category) return false
+    if (domain && info.domain !== domain) return false
+    if (runtime && info.runtime !== runtime) return false
     if (!query) return true
     const needle = query.toLowerCase()
     return [meta.id, meta.title, meta.slug, ...meta.tags].some((value) =>
@@ -200,6 +239,8 @@ export function mountGallery(root: HTMLElement): { destroy: () => void } {
   })
   reset.addEventListener('click', () => {
     category = null
+    domain = null
+    runtime = null
     query = ''
     search.value = ''
     render()
