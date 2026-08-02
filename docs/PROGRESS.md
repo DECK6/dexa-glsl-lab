@@ -82,3 +82,12 @@
 - 마스터의 추가 승인에 따라 공개 소스 저장소 [`DECK6/dexa-glsl-lab`](https://github.com/DECK6/dexa-glsl-lab)을 생성하고 `master`를 push했다. 카탈로그 `70b88d8`, 배포 원장 `7432495`, GEN/VFX LAB 형식을 따른 README `c26805e`가 원격에 반영됐다.
 - adxdeck에는 `47d2c4b` (`feat: publish DEXA GLSL LAB`)로 `glsl/` 403개 파일만 격리 커밋·push했다. GitHub Pages run `30728923245`의 build/deploy/report-build-status가 모두 성공했다.
 - 공개 [`https://dexa.art/glsl/`](https://dexa.art/glsl/)과 대표 썸네일·해시 자산의 HTTP 200을 확인했다. 공개 페이지를 새로 연 Aside 브라우저 감사에서도 카드 200개, 썸네일 200개, console/page/network error 0개와 CA01 696×696 WebGL·라이브 편집 UI를 확인했다.
+
+### 500 확장 전달 기록
+
+- 마스터가 확정한 **Core 350 + Buffer 100 + Input 50** 구조로 50개 카테고리·500종을 완성했다. 기존 200종은 보존했고 신규 300종과 3단계 런타임 계약을 추가했다.
+- 공개 소스 저장소 `DECK6/dexa-glsl-lab`의 `master`에 `55462b1` (`feat: expand GLSL catalog to 500 works`)을 push했다. 원격 `master` SHA는 `55462b164b38ba41d90824b0e9b17440f5454922`와 일치한다.
+- 공유 작업 트리와 격리한 새 clone에서 빌드 산출물과 `glsl/`을 전수 비교한 뒤, `DECK6/adxdeck`의 `07a544f` (`feat: publish 500-work GLSL LAB`)로 `glsl/`만 push했다. 배포본은 1,003개 파일, 썸네일 500개, 0-byte 0개이며 로컬 `dist/`와 byte-for-byte 일치한다.
+- GitHub Pages run [`30731651509`](https://github.com/DECK6/adxdeck/actions/runs/30731651509)의 build·report-build-status·deploy가 모두 성공했다.
+- 공개 [`https://dexa.art/glsl/`](https://dexa.art/glsl/)과 신규 `AD01` 썸네일이 HTTP 200이다. Aside 실서비스 감사에서 전체 `500 / 500`, 런타임 필터 `350 / 100 / 50`, 카테고리별 10종, Buffer `AU01`, Input `AD01`, 신규 Core `AR01`의 696×696 WebGL 렌더·상세 소스 편집기·관련 작품, 한/영 About의 500종 문구를 확인했다.
+- 인계된 `.check-pattern.mjs`, `.thumb-pattern.mjs`는 수정·삭제·stage·commit하지 않고 계속 보존한다.
