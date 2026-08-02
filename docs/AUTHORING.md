@@ -40,7 +40,8 @@ export default {
 
 ```bash
 cd /Volumes/data/Dev/dexa-glsl-lab
-node scripts/lint-registry.mjs   # 에러 0이어야 함
+bun run lint:registry   # 계약·메타·20×10 카탈로그 에러 0
+bun run audit:shaders  # 전 종 실컴파일·blank·frozen·근접중복 감사
 ```
 
 참고 예제: `shaders/raymarch/RM01_orbit-torus.frag`, `shaders/noise/NS01_fbm-drift.frag`, `shaders/minimal/MN01_breath-line.frag`

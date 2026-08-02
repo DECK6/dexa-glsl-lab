@@ -60,6 +60,9 @@ const REQUIRED = [
 const errors = []
 const ids = new Map()
 let fragCount = 0
+const inventory = new Map(
+  Object.keys(PREFIXES).map((category) => [category, { meta: new Set(), frag: new Set() }]),
+)
 
 if (!existsSync(SHADERS)) {
   console.log('lint:registry — shaders/ not present yet, nothing to lint')
@@ -86,6 +89,7 @@ for (const category of readdirSync(SHADERS)) {
         continue
       }
       const [, id, slug] = match
+      inventory.get(category).meta.add(id)
       if (ids.has(id)) errors.push(`duplicate id ${id}: ${where} vs ${ids.get(id)}`)
       ids.set(id, where)
       if (!id.startsWith(prefix)) {
@@ -103,6 +107,24 @@ for (const category of readdirSync(SHADERS)) {
       if (field('category') !== category) {
         errors.push(`meta category: ${where} must declare category '${category}'`)
       }
+      const title = field('title')
+      if (!title || title !== title.toUpperCase()) {
+        errors.push(`meta title: ${where} must declare a non-empty uppercase English title`)
+      }
+      const description = field('description')
+      if (!description || !/[가-힣]/.test(description)) {
+        errors.push(`meta description: ${where} must declare a Korean sentence`)
+      }
+      const tagsSource = source.match(/tags:\s*\[([^\]]*)\]/)?.[1]
+      const tags = tagsSource ? [...tagsSource.matchAll(/'([^']+)'/g)].map((tag) => tag[1]) : []
+      if (tags.length < 3 || tags.length > 5) {
+        errors.push(`meta tags: ${where} must declare 3–5 tags`)
+      }
+      for (const tag of tags) {
+        if (!/^[a-z0-9-]+$/.test(tag)) {
+          errors.push(`meta tags: ${where} tag '${tag}' must be lowercase kebab-case`)
+        }
+      }
       continue
     }
 
@@ -113,6 +135,7 @@ for (const category of readdirSync(SHADERS)) {
         errors.push(`naming: ${where} does not match <ID>_<slug>.frag`)
         continue
       }
+      inventory.get(category).frag.add(match[1])
       if (!existsSync(path.replace(/\.frag$/, '.meta.ts'))) {
         errors.push(`pair: ${where} has no matching ${match[1]}_${match[2]}.meta.ts`)
       }
@@ -130,6 +153,26 @@ for (const category of readdirSync(SHADERS)) {
     errors.push(`stray file: ${where} — only .meta.ts / .frag belong in shaders/`)
   }
 }
+
+for (const [category, prefix] of Object.entries(PREFIXES)) {
+  const found = inventory.get(category)
+  const expected = Array.from({ length: 10 }, (_, index) => `${prefix}${String(index + 1).padStart(2, '0')}`)
+  for (const kind of ['meta', 'frag']) {
+    const actual = found[kind]
+    if (actual.size !== expected.length) {
+      errors.push(`count: shaders/${category} must contain 10 ${kind} files, found ${actual.size}`)
+    }
+    for (const id of expected) {
+      if (!actual.has(id)) errors.push(`catalog: shaders/${category} is missing ${id} ${kind}`)
+    }
+    for (const id of actual) {
+      if (!expected.includes(id)) errors.push(`catalog: shaders/${category} has out-of-range ${id} ${kind}`)
+    }
+  }
+}
+
+if (ids.size !== 200) errors.push(`catalog: expected 200 meta entries, found ${ids.size}`)
+if (fragCount !== 200) errors.push(`catalog: expected 200 fragment shaders, found ${fragCount}`)
 
 if (errors.length) {
   console.error(`lint:registry — ${errors.length} error(s):`)

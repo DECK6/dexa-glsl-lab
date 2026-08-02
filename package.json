@@ -9,6 +9,8 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "lint:registry": "node scripts/lint-registry.mjs",
+    "audit:shaders": "node scripts/audit-shaders.mjs",
+    "audit:contacts": "node scripts/contact-sheets.mjs",
     "thumbs": "node scripts/thumbs.mjs",
     "test:e2e": "playwright test",
     "deploy": "bash scripts/deploy.sh"
